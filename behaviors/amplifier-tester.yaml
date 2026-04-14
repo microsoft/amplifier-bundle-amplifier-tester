@@ -1,0 +1,16 @@
+bundle:
+  name: amplifier-tester-behavior
+  version: 0.1.0
+  description: Validates Amplifier ecosystem changes via dynamically generated DTU profiles
+
+includes:
+  - bundle: git+https://github.com/microsoft/amplifier-bundle-digital-twin-universe@main
+
+agents:
+  include:
+    - amplifier-tester:setup-digital-twin
+    - amplifier-tester:validator
+
+context:
+  include:
+    - amplifier-tester:context/amplifier-tester-awareness.md

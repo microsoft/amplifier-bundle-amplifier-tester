@@ -1,0 +1,78 @@
+digraph amplifier_tester {
+    rankdir=TB
+    compound=true
+    fontname="Helvetica"
+    node [fontname="Helvetica" fontsize=11]
+    edge [fontname="Helvetica" fontsize=9]
+
+    // --- Developer side ---
+    subgraph cluster_developer {
+        label="Developer Machine"
+        style=rounded
+        color="#666666"
+
+        local_repos [label="Local Repos\n(core, modules,\nbundles, cli)" shape=folder fillcolor="#E8F4FD" style=filled]
+        amplifier_session [label="Amplifier Session\n+ amplifier-tester" shape=box fillcolor="#D4E6F1" style="filled,rounded"]
+    }
+
+    // --- Agents ---
+    subgraph cluster_agents {
+        label="Agents"
+        style=rounded
+        color="#2E86C1"
+        fontcolor="#2E86C1"
+
+        setup_digital_twin [label="setup-digital-twin\n\nGather context\nClassify repos\nMirror to Gitea\nGenerate profile\nLaunch + verify" shape=box fillcolor="#AED6F1" style="filled,rounded"]
+        ecosystem_validator [label="validator\n\nRun checks\nReport pass/fail" shape=box fillcolor="#AED6F1" style="filled,rounded"]
+    }
+
+    // --- Gitea ---
+    subgraph cluster_gitea {
+        label="Gitea Instance"
+        style=rounded
+        color="#27AE60"
+        fontcolor="#27AE60"
+
+        gitea_repos [label="Mirrored Repos\n+ local changes" shape=cylinder fillcolor="#D5F5E3" style=filled]
+    }
+
+    // --- DTU ---
+    subgraph cluster_dtu {
+        label="Digital Twin Universe"
+        style=rounded
+        color="#E67E22"
+        fontcolor="#E67E22"
+
+        subgraph cluster_dtu_inside {
+            label="Incus Container"
+            style=dashed
+            color="#F0B27A"
+
+            amplifier_install [label="Amplifier CLI\n(installed from\nGitea via rewrites)" shape=box fillcolor="#FDEBD0" style="filled,rounded"]
+            smoke_test [label="Smoke Tests\n(version, import,\nrun, bundle list)" shape=box fillcolor="#FDEBD0" style="filled,rounded"]
+        }
+
+        dtu_profile [label="Generated\nProfile YAML" shape=note fillcolor="#FAD7A0" style=filled]
+    }
+
+    // --- Edges ---
+    amplifier_session -> setup_digital_twin [label="1. set up a\ndigital twin"]
+    local_repos -> setup_digital_twin [label="repo paths\nor workspace" style=dashed]
+
+    setup_digital_twin -> gitea_repos [label="2. mirror +\npush changes"]
+    setup_digital_twin -> dtu_profile [label="3. generate\nprofile"]
+    dtu_profile -> amplifier_install [label="4. launch DTU\n(url_rewrites\n+ pypi_overrides)"]
+    gitea_repos -> amplifier_install [label="serves code\n(looks like upstream)" style=dashed]
+
+    setup_digital_twin -> smoke_test [label="5. verify"]
+    setup_digital_twin -> amplifier_session [label="6. report\nresults"]
+
+    ecosystem_validator -> smoke_test [label="targeted\nchecks" style=dashed]
+
+    // --- External ---
+    pypi [label="PyPI" shape=box3d fillcolor="#F5F5F5" style=filled]
+    anthropic [label="Anthropic API" shape=box3d fillcolor="#F5F5F5" style=filled]
+
+    amplifier_install -> pypi [label="non-overridden\npackages" style=dotted]
+    amplifier_install -> anthropic [label="passthrough\n(smoke test)" style=dotted]
+}
