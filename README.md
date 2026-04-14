@@ -20,13 +20,15 @@ See their READMEs for prerequisite setup:
 
 ## Installation
 
+`--app` composes the bundle onto every Amplifier session. Remove it to only register the bundle for later activation with `amplifier bundle use`.
+
 ```bash
 amplifier bundle add git+https://github.com/microsoft/amplifier-bundle-amplifier-tester@main --app
 ```
 
 To compose into an existing bundle:
 ```bash
-amplifier bundle add "git+https://github.com/microsoft/amplifier-bundle-amplifier-tester@main#subdirectory=behaviors/amplifier-tester.yaml"
+amplifier bundle add "git+https://github.com/microsoft/amplifier-bundle-amplifier-tester@main#subdirectory=behaviors/amplifier-tester.yaml" --app
 ```
 
 
