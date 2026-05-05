@@ -221,7 +221,10 @@ output so the user can debug. Suggest next steps:
 
 If the user fixes something and wants to re-test:
 
-1. They push new changes to Gitea (`git push gitea HEAD:main --force`)
+1. Re-run `setup-digital-twin` against the same repo paths so it re-mirrors
+   the user's current working tree (committed + uncommitted + untracked) to
+   Gitea via its snapshot flow. **Do not** instruct the user to commit or to
+   push from their working tree directly -- the snapshot flow should not mutate local state unless the user asks for it.
 2. Run: `amplifier-digital-twin update <id>`
 3. Re-run the validation checks above
 

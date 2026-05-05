@@ -215,17 +215,46 @@ For each changed repo:
      --github-repo https://github.com/microsoft/<repo-name>
    ```
 
-3. **Push local changes on top.** This is critical -- the Gitea mirror must
-   reflect the developer's local state, not just upstream:
+3. **Push the working tree to Gitea via a temporary snapshot clone.**
+   This is critical -- the Gitea mirror must reflect the developer's exact
+   local state (committed + staged + unstaged + untracked + deletions).
+
+   **Hard rules:**
+   - NEVER `cd` into `<local-repo-path>` to run a state-mutating git command
+     (`git add`, `git commit`, `git stash`, `git reset`, etc.) with the user asking for that. 
+     All commits happen in the snapshot directory, never in the source.
+   - NEVER tell the user to commit their local changes "before validating."
+     The snapshot captures uncommitted work; commits in their tree are not
+     required and must not be created on their behalf.
+
    ```bash
-   cd <local-repo-path>
-   git remote add gitea "http://admin:$GITEA_TOKEN@localhost:<port>/admin/<repo-name>.git" 2>/dev/null || true
+   SNAPSHOT_DIR="$(mktemp -d)/<repo-name>"
+   # Cheap clone (objects shared via hardlinks where supported)
+   git clone --local --no-hardlinks "<local-repo-path>" "$SNAPSHOT_DIR"
+
+   # Overlay staged + unstaged + untracked files from the user's working tree
+   ( cd "<local-repo-path>" \
+       && git ls-files -z --cached --modified --others --exclude-standard ) \
+     | rsync -a --files-from=- --from0 "<local-repo-path>/" "$SNAPSHOT_DIR/"
+
+   # Mirror tracked-file deletions from the working tree into the snapshot
+   ( cd "<local-repo-path>" && git ls-files -z --deleted ) \
+     | (cd "$SNAPSHOT_DIR" && xargs -0 --no-run-if-empty rm -f)
+
+   # Single throwaway commit in the SNAPSHOT (not the user's repo)
+   cd "$SNAPSHOT_DIR"
+   git -c user.email=dtu@local -c user.name="DTU Snapshot" add -A
+   git -c user.email=dtu@local -c user.name="DTU Snapshot" \
+       commit --allow-empty -m "DTU snapshot of working tree"
+
+   git remote add gitea "http://admin:$GITEA_TOKEN@localhost:<port>/admin/<repo-name>.git"
    git push gitea HEAD:main --force
+
+   rm -rf "$(dirname "$SNAPSHOT_DIR")"
    ```
 
-   If the developer has uncommitted changes, warn them that only committed
-   changes will be reflected in the DTU. They should commit (even locally)
-   before validating.
+   If snapshotting fails for any reason, abort and report -- never fall back
+   to operating on the user's working tree.
 
 
 ### 5. Generate the Profile YAML

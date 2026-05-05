@@ -76,12 +76,13 @@ AND `url_rewrites` for the module. One DTU tests everything together.
 
 The generated DTU profiles include an `update` section. After fixing an issue:
 
-1. Commit the fix locally
-2. Push to Gitea (`git push gitea HEAD:main --force`)
-3. `amplifier-digital-twin update <instance-id>`
-4. Re-run validator
+1. Re-run `setup-digital-twin` against the same repos -- it re-mirrors your
+   current working tree (committed and uncommitted) to Gitea via a temporary
+   snapshot clone. Your local repo is never modified.
+2. `amplifier-digital-twin update <instance-id>`
+3. Re-run validator
 
-No need to destroy and relaunch.
+No need to commit your fix locally and no need to destroy and relaunch.
 
 
 ## Scope
