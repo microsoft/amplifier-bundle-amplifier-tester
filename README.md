@@ -20,16 +20,17 @@ See their READMEs for prerequisite setup:
 
 ## Installation
 
-`--app` composes the bundle onto every Amplifier session. Remove it to only register the bundle for later activation with `amplifier bundle use`.
+If you use `amplifier-foundation`, this bundle is included automatically and the `amplifier-tester:setup-digital-twin` and `amplifier-tester:validator` agents are already available. No install required.
 
-```bash
-amplifier bundle add git+https://github.com/microsoft/amplifier-bundle-amplifier-tester@main --app
-```
+To compose into a custom bundle (without foundation), reference the behavior:
 
-To compose into an existing bundle:
 ```bash
 amplifier bundle add "git+https://github.com/microsoft/amplifier-bundle-amplifier-tester@main#subdirectory=behaviors/amplifier-tester.yaml" --app
 ```
+
+`--app` composes the bundle onto every Amplifier session. Remove it to only register the bundle for later activation with `amplifier bundle use`.
+
+This bundle doesn't ship a runtime (no provider, orchestrator, or tools) — it must be composed onto a bundle that does, like `amplifier-foundation`.
 
 
 ## What It Validates
