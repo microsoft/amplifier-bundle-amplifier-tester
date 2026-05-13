@@ -72,35 +72,26 @@ pypi_overrides:
 
 ## Provider Configuration
 
-Every DTU profile for amplifier tester needs a configured LLM provider
-for smoke tests. The standard configuration:
+Generated profiles should mirror the user's host `~/.amplifier/settings.yaml`
+`config.providers` block rather than hard-coding a single provider. One
+`passthrough.services` entry is emitted per env var referenced by the
+host's providers. The `config.providers` block is then written verbatim
+into the in-DTU `/root/.amplifier/settings.yaml` via a heredoc that
+expands `${VAR}` references using the passthrough'd values.
 
-```yaml
-passthrough:
-  allow_external: true
-  services:
-    - name: anthropic
-      key_env: ANTHROPIC_API_KEY
-```
+If a provider module is among the changed repos, the `source:` URL still
+points at `github.com` -- `url_rewrites` transparently redirects it to
+Gitea. No special handling needed.
 
-And in the provision setup_cmds:
-```yaml
-- |
-  mkdir -p /root/.amplifier
-  cat > /root/.amplifier/settings.yaml << EOF
-  config:
-    providers:
-      - module: provider-anthropic
-        source: git+https://github.com/microsoft/amplifier-module-provider-anthropic@main
-        config:
-          api_key: $ANTHROPIC_API_KEY
-  EOF
-```
+See setup-digital-twin step 5 for the full process and the
+`amplifier-module-provider-anthropic` default for hosts without a
+`~/.amplifier/settings.yaml`.
 
-**Important:** If `amplifier-module-provider-anthropic` is among the changed
-repos, the `source:` line in settings.yaml still points to `github.com` because
-the DTU's `url_rewrites` transparently redirect it to Gitea. No special handling
-needed in settings.yaml.
+
+## GitHub Credential Forwarding
+
+`GH_TOKEN` is forwarded only when the scenario requires private repo
+access detailed in `agents/setup-digital-twin.md`
 
 
 ## Common Multi-Repo Combinations
