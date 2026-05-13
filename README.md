@@ -5,6 +5,11 @@ Validates Amplifier ecosystem changes (bundles, modules, prompts, app-cli, core,
 The bundle dynamically generates the right profile based on what you actually changed using an agent.
 Then the ecosystem validator mirrors your local repos to Gitea, builds the correct `url_rewrites` and `pypi_overrides`, launches a DTU, and runs validation checks.
 
+Example Uses:
+
+- "I made changes to amplifier-foundation and a couple of modules. Can you spin up a DTU and validate they work together?"
+- "I want to try out a lean Amplifier configuration with my custom bundle composed in, without messing with my global Amplifier."
+
 ![Architecture](docs/amplifier-tester-architecture.svg)
 
 
