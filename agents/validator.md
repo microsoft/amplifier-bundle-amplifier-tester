@@ -74,15 +74,21 @@ Use `amplifier-digital-twin exec` to run commands inside the DTU.
 
 **IMPORTANT: Do NOT use `bash -lc`. It can hang.** Use one of these patterns:
 
-Bare command (when the tool is on PATH, which `amplifier` is by default):
+Bare command (only when invoking tools by absolute path or tools that ship in
+a default PATH location like `/usr/bin`):
 ```bash
-amplifier-digital-twin exec <id> -- amplifier --version
+amplifier-digital-twin exec <id> -- /usr/bin/uname -a
 ```
 
-With PATH setup (when you need tools from `/root/.local/bin`):
+With PATH setup (the default for anything installed under `~/.local/bin`,
+including `amplifier` and `uv`):
 ```bash
 amplifier-digital-twin exec <id> -- bash -c 'export PATH="/root/.local/bin:$PATH" && amplifier --version'
 ```
+
+`amplifier` is installed via `uv tool install` into `/root/.local/bin/` which
+is NOT on the default exec PATH. Always prefix with the export when running
+amplifier, uv, or any other tool installed by the provisioning steps.
 
 All exec commands return JSON with `exit_code`, `stdout`, and `stderr` fields.
 Check `exit_code` to determine pass/fail.

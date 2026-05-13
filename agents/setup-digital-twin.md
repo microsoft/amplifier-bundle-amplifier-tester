@@ -257,11 +257,78 @@ For each changed repo:
    to operating on the user's working tree.
 
 
-### 5. Generate the Profile YAML
+### 5. Discover Host Configuration & Determine Credential Needs
 
-Build the profile dynamically based on the classified change types.
-Write it to `/tmp/amplifier-tester/profile-<timestamp>.yaml` by default.
-If the user explicitly asks to persist, write to
+Runs entirely on the host before any profile YAML is written.
+
+#### 5a. Read host config and collect env var references
+
+Read `~/.amplifier/settings.yaml`. Extract `config.providers` (full
+module/source/config blocks) and `bundle.app` (URLs of bundles Amplifier
+composes onto sessions; the in-DTU `amplifier update` will clone these).
+
+Scan every provider `config:` block for `${VAR}` and `$VAR` references and
+build the set of env vars the in-DTU session needs. Skip providers that
+reference none (e.g. `provider-github-copilot` has its own auth flow).
+
+Warn (do not fail) about any referenced env var that is unset on the host.
+
+If `~/.amplifier/settings.yaml` does not exist, default to one
+`provider-anthropic` entry from `$ANTHROPIC_API_KEY` and an empty
+`bundle.app`.
+
+#### 5b. Decide if GH_TOKEN forwarding is required
+
+For each `github.com/<owner>/<repo>` URL across the changed repos under test
+AND the user's `bundle.app` list, probe whether the DTU's unauthenticated
+clone will succeed:
+
+```bash
+curl -fsS -o /dev/null -w "%{http_code}\n" "https://github.com/<owner>/<repo>"
+```
+
+- `200` → public; the DTU can clone without credentials.
+- `404` → private OR does not exist. Both cases fail without a token, so
+  treat as "requires GH_TOKEN".
+- anything else (network error, 5xx) → treat as "requires GH_TOKEN" and
+  surface the unusual response in the hand-back report.
+
+If ALL probed URLs return 200, skip 5c. If ANY return non-200, continue.
+
+Do NOT use `git ls-remote` for this check. Git silently picks up
+credentials from system config, credential helpers, and env vars,
+producing false negatives.
+
+#### 5c. Resolve GH_TOKEN (only when 5b triggered)
+
+Resolution order. Stop at the first that succeeds:
+
+1. `$GH_TOKEN` already set → use it.
+2. `$GITHUB_TOKEN` set → re-export as `GH_TOKEN` for the launch command.
+3. `gh` CLI authenticated → `gh auth status >/dev/null 2>&1 && GH_TOKEN="$(gh auth token)"`.
+   Capture into a shell variable; never echo the token in chat output, logs,
+   or hand-back reports.
+4. None of the above → fail and stop:
+   ```
+   This DTU scenario requires GitHub access for private repo(s):
+     - <list of private repos detected>
+
+   No GH credentials available. Either:
+     - Run `gh auth login` (or `gh auth refresh -s repo` if scope is missing), or
+     - Set GH_TOKEN in your environment before launching.
+   ```
+   Do not generate, persist, or write a token.
+
+The token must never appear in the profile YAML; the profile references
+`key_env: GH_TOKEN` only.
+
+
+### 6. Generate the Profile YAML
+
+Build the profile dynamically based on the classified change types and the
+host configuration discovered in step 5. Write it to
+`/tmp/amplifier-tester/profile-<timestamp>.yaml` by default. If the user
+explicitly asks to persist, write to
 `.amplifier/digital-twin-universe/profiles/` instead.
 
 The profile structure (include only the sections that are needed):
@@ -298,7 +365,8 @@ pypi_overrides:
         build_cmd: uv run --with maturin maturin build --release
         wheel_glob: target/wheels/amplifier_core-*.whl
 
-# -- passthrough: always include anthropic for smoke tests --
+# -- passthrough: one entry per env var collected in step 5a, plus a GH_TOKEN
+# entry if step 5b triggered. `name:` is free-form; `key_env:` is what matters. --
 passthrough:
   allow_external: true
   services:
@@ -311,14 +379,16 @@ provision:
     - apt-get update && apt-get install -y git curl
     - curl -LsSf https://astral.sh/uv/install.sh | sh
 
-    # Install Amplifier CLI
-    # If CLI repo changed, url_rewrites redirects this to Gitea automatically.
+    # INCLUDE this line ONLY if step 5b triggered. Omit otherwise.
+    - git config --global url."https://${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+    # Install Amplifier CLI. url_rewrites redirects this to Gitea if CLI repo changed.
     - |
       export PATH="/root/.local/bin:$PATH"
       uv tool install git+https://github.com/microsoft/amplifier
 
-    # Configure provider
-    # If provider-anthropic changed, the source URL is rewritten to Gitea transparently.
+    # Mirror host `config.providers` verbatim. Keep ${VAR} references as-is;
+    # the heredoc expands them using the values forwarded via passthrough.
     - |
       mkdir -p /root/.amplifier
       cat > /root/.amplifier/settings.yaml << EOF
@@ -327,7 +397,7 @@ provision:
           - module: provider-anthropic
             source: git+https://github.com/microsoft/amplifier-module-provider-anthropic@main
             config:
-              api_key: $ANTHROPIC_API_KEY
+              api_key: ${ANTHROPIC_API_KEY}
       EOF
 
     # -- Bundle-specific: only for bundle-type changes --
@@ -357,11 +427,17 @@ readiness:
 **Assembly rules:**
 
 - `url_rewrites.rules`: One entry per non-core changed repo.
-- `pypi_overrides`: Include ONLY if `amplifier-core` is among the changed repos.
-  `amplifier-core` is the only ecosystem package published to PyPI.
-- `provision.setup_cmds`: Always include base install. Add `amplifier bundle add`
-  lines for each bundle-type change. If the changed module is provider-anthropic,
-  the settings.yaml source URL is rewritten transparently -- no special handling.
+- `pypi_overrides`: Include ONLY if `amplifier-core` is among the changed
+  repos. `amplifier-core` is the only ecosystem package published to PyPI.
+- `passthrough.services`: One entry per env var collected in step 5a. Plus
+  one `key_env: GH_TOKEN` entry IF step 5b triggered. Do not hard-code
+  Anthropic; do not forward env vars the user's providers don't reference.
+- `provision.setup_cmds`:
+  - Always include base install (apt + uv + Amplifier CLI).
+  - Include the `git config insteadOf` line IF step 5b triggered.
+  - Mirror the user's `config.providers` verbatim into the in-DTU
+    settings.yaml. Do not hard-code a single provider.
+  - Add `amplifier bundle add` lines for each bundle-type change.
 - `update`: Always include. Set `refresh_pypi: true` when core is changed.
   Uses `amplifier update --yes --force` to refresh the environment.
 
@@ -373,16 +449,20 @@ readiness:
   `export PATH="/root/.local/bin:$PATH"`
 
 
-### 6. Launch the DTU
+### 7. Launch the DTU
+
+If step 5c resolved a token, prefix the launch command so `GH_TOKEN` is set
+in the launch process env. Pass via env block, never argv.
 
 ```bash
-amplifier-digital-twin launch <profile-path> \
+GH_TOKEN="$GH_TOKEN" amplifier-digital-twin launch <profile-path> \
   [--var GITEA_URL=http://localhost:<port>] \
   [--var GITEA_TOKEN=<token>] \
   [--name <descriptive-name>]
 ```
 
-
+(If `$GH_TOKEN` was already exported on the host, the prefix is redundant
+but harmless.)
 
 Capture the JSON output. You need:
 - `id` for status/exec/destroy commands
@@ -390,7 +470,7 @@ Capture the JSON output. You need:
 - `info` for readiness check hints
 
 
-### 7. Wait for Readiness
+### 8. Wait for Readiness
 
 ```bash
 for i in $(seq 1 40); do
@@ -404,7 +484,7 @@ done
 ```
 
 
-### 8. Verify
+### 9. Verify
 
 Run a basic sanity check that Amplifier works inside the DTU:
 
@@ -429,7 +509,7 @@ amplifier-digital-twin exec <id> -- cat /var/log/*.log
 Fix the profile and re-launch if needed. Do not hand back a broken environment.
 
 
-### 9. Hand Back to User
+### 10. Hand Back to User
 
 Report the results clearly. Your return message MUST include:
 
