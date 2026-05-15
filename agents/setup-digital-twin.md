@@ -198,6 +198,20 @@ amplifier-gitea list
 
 Save `GITEA_URL` (e.g. `http://localhost:10110`) and `GITEA_TOKEN` for later.
 
+**Determine correct GITEA_URL accessible from within the DTU.** If the automatic `localhost` → host-gateway rewrite doesn't reach Gitea (e.g. when Incus and Docker run in separate VMs), probe from inside a temporary container to find a working host IP:
+See the digital-twin-universe's troubleshooting.md if it is not accessible.
+
+```bash
+incus launch images:ubuntu/24.04 probe-tmp --quiet
+for ip in <candidate-host-ips>; do
+  incus exec probe-tmp -- curl -sf --connect-timeout 2 "http://$ip:<port>/" \
+    && echo "$ip works" && break
+done
+incus delete probe-tmp --force
+```
+
+If a non-localhost IP works, pass it explicitly at launch time (Step 7) as `--var GITEA_URL=http://<host-ip>:<port>`.
+
 
 ### 4. Mirror Changed Repos to Gitea
 
