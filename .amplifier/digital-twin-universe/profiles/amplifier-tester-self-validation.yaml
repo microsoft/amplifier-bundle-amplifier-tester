@@ -44,9 +44,7 @@ provision:
     - curl -LsSf https://astral.sh/uv/install.sh | sh
 
     # Install Amplifier CLI
-    - |
-      export PATH="/root/.local/bin:$PATH"
-      uv tool install git+https://github.com/microsoft/amplifier
+    - uv tool install git+https://github.com/microsoft/amplifier
 
     # Configure Amplifier provider
     - |
@@ -61,11 +59,9 @@ provision:
       EOF
 
     # Install the amplifier-tester bundle from Gitea (picks up local changes).
-    # The URL rewrite redirects github.com/DavidKoleczek/... to Gitea.
+    # The URL rewrite redirects github.com/microsoft/... to Gitea.
     # DTU and Gitea dependencies come from upstream GitHub.
-    - |
-      export PATH="/root/.local/bin:$PATH"
-      amplifier bundle add git+https://github.com/microsoft/amplifier-bundle-amplifier-tester@main --app
+    - amplifier bundle add git+https://github.com/microsoft/amplifier-bundle-amplifier-tester@main --app
 
     # Verify
     - amplifier --version
@@ -75,10 +71,8 @@ provision:
 
 update:
   cmds:
-    - |
-      export PATH="/root/.local/bin:$PATH"
-      amplifier update --yes --force
+    - amplifier update --yes --force
 
 readiness:
   - name: amplifier-installed
-    command: "PATH=/root/.local/bin:$PATH amplifier --version"
+    command: "amplifier --version"

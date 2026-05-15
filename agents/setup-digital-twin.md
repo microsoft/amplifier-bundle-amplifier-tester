@@ -397,9 +397,10 @@ provision:
     - git config --global url."https://${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
 
     # Install Amplifier CLI. url_rewrites redirects this to Gitea if CLI repo changed.
-    - |
-      export PATH="/root/.local/bin:$PATH"
-      uv tool install git+https://github.com/microsoft/amplifier
+    # /root/.cargo/bin and /root/.local/bin are on PATH for every bash -lc
+    # invocation (setup_cmds, update.cmds, readiness, exec) via
+    # /etc/profile.d/dtu-env.sh, so amplifier/uv commands run bare.
+    - uv tool install git+https://github.com/microsoft/amplifier
 
     # Mirror host `config.providers` verbatim. Keep ${VAR} references as-is;
     # the heredoc expands them using the values forwarded via passthrough.
@@ -415,9 +416,7 @@ provision:
       EOF
 
     # -- Bundle-specific: only for bundle-type changes --
-    - |
-      export PATH="/root/.local/bin:$PATH"
-      amplifier bundle add git+https://github.com/microsoft/<bundle-repo>@main --app
+    - amplifier bundle add git+https://github.com/microsoft/<bundle-repo>@main --app
 
     # Verify
     - amplifier --version
@@ -429,13 +428,11 @@ provision:
 update:
   refresh_pypi: true  # only if core changes are present, otherwise omit
   cmds:
-    - |
-      export PATH="/root/.local/bin:$PATH"
-      amplifier update --yes --force
+    - amplifier update --yes --force
 
 readiness:
   - name: amplifier-installed
-    command: "PATH=/root/.local/bin:$PATH amplifier --version"
+    command: amplifier --version
 ```
 
 **Assembly rules:**
@@ -459,8 +456,10 @@ readiness:
 - Commands run with `bash -lc` in order
 - Proxy env vars and passthrough secrets are already available
 - Launch fails on the first non-zero exit code
-- For tools installed to `~/.local/bin`, export PATH explicitly:
-  `export PATH="/root/.local/bin:$PATH"`
+- `/root/.cargo/bin` and `/root/.local/bin` are already on PATH for every
+  `bash -lc` invocation (setup_cmds, update.cmds, readiness commands, `exec`)
+  via `/etc/profile.d/dtu-env.sh`. Do NOT add inline `export PATH=...`
+  prefixes -- they are redundant and accumulate as maintenance debt.
 
 
 ### 7. Launch the DTU
@@ -504,15 +503,15 @@ Run a basic sanity check that Amplifier works inside the DTU:
 
 ```bash
 # CLI installed?
-amplifier-digital-twin exec <id> -- bash -c 'export PATH="/root/.local/bin:$PATH" && amplifier --version'
+amplifier-digital-twin exec <id> -- amplifier --version
 
 # Provider works? (This exercises the full stack: CLI, provider, LLM, tool dispatch)
-amplifier-digital-twin exec <id> -- bash -c 'export PATH="/root/.local/bin:$PATH" && amplifier run "Say exactly: amplifier-tester-ok"'
+amplifier-digital-twin exec <id> -- amplifier run "Say exactly: amplifier-tester-ok"
 ```
 
 For bundle changes, also verify:
 ```bash
-amplifier-digital-twin exec <id> -- bash -c 'export PATH="/root/.local/bin:$PATH" && amplifier bundle list'
+amplifier-digital-twin exec <id> -- amplifier bundle list
 ```
 
 If verification fails, check logs:
