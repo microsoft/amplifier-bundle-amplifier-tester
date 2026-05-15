@@ -1,0 +1,12 @@
+# Eval run outputs. Regenerated per run; may contain captured session files
+# (events.jsonl, transcript.jsonl, metadata.json) with materialized secrets.
+**/results/
+
+# Python bytecode.
+__pycache__/
+*.py[cod]
+
+# Editor / OS noise.
+.DS_Store
+*.swp
+*~
