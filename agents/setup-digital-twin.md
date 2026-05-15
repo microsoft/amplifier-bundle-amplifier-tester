@@ -393,6 +393,10 @@ provision:
     - apt-get update && apt-get install -y git curl
     - curl -LsSf https://astral.sh/uv/install.sh | sh
 
+    # INCLUDE ONLY if amplifier-core is among the changed repos. Omit otherwise.
+    # ubuntu:24.04 ships without rustc/cargo; maturin build --release requires them.
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+
     # INCLUDE this line ONLY if step 5b triggered. Omit otherwise.
     - git config --global url."https://${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
 
@@ -445,6 +449,10 @@ readiness:
   Anthropic; do not forward env vars the user's providers don't reference.
 - `provision.setup_cmds`:
   - Always include base install (apt + uv + Amplifier CLI).
+  - Include the Rust toolchain install (`rustup`) ONLY if `amplifier-core` is
+    among the changed repos. `ubuntu:24.04` ships without `rustc`/`cargo`,
+    which `maturin build --release` requires. Place it before the Amplifier
+    CLI install step.
   - Include the `git config insteadOf` line IF step 5b triggered.
   - Mirror the user's `config.providers` verbatim into the in-DTU
     settings.yaml. Do not hard-code a single provider.
