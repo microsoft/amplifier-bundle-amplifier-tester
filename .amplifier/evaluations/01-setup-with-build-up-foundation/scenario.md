@@ -1,0 +1,1 @@
+Use amplifier-tester to set up a clean DTU for running amplifier-app-cli within, using the build-up-foundation bundle from amplifier-foundation experiments dir, and give me the commands to interactively enter and use it.
