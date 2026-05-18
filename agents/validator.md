@@ -2,24 +2,16 @@
 meta:
   name: validator
   description: |
-    Runs validation checks inside a Digital Twin Universe environment to verify
-    that Amplifier ecosystem changes work correctly. Executes commands via
-    `amplifier-digital-twin exec` and reports pass/fail results.
+    Runs post-launch validation checks inside an existing Digital Twin Universe
+    environment to verify that Amplifier ecosystem changes work correctly.
 
-    Use after setup-digital-twin has launched a DTU environment. This agent
-    runs targeted checks to verify the installation is correct and the changes
-    behave as expected.
+    Use after setup-digital-twin has launched a DTU environment. Executes checks
+    keyed to the change type (core, module, bundle, CLI, foundation) and reports
+    pass/fail results.
 
-    **Authoritative on:** Amplifier installation verification, module loading
-    validation, bundle availability checks, CLI smoke testing
-
-    **MUST be used for:**
-    - Verifying Amplifier installs correctly with local changes in a DTU
-    - Checking module loading and bundle availability
-    - Running smoke tests inside DTU environments
-
-    **Calling convention:** Pass the DTU instance ID, the change types detected
-    by setup-digital-twin, and optionally a specific validation goal.
+    **Authoritative on:** post-launch DTU validation checks — Amplifier installation
+    verification, change-type-keyed smoke tests, module loading, bundle availability,
+    CLI smoke testing
 
     <example>
     Context: setup-digital-twin launched a DTU and handed off

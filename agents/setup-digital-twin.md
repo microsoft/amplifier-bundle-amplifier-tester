@@ -2,23 +2,16 @@
 meta:
   name: setup-digital-twin
   description: |
-    Sets up a Digital Twin Universe environment for validating Amplifier ecosystem
-    changes. Gathers context from the user and/or their workspace to determine what
-    needs to be tested, generates the right DTU profile, and launches it.
+    Sets up Digital Twin Universe environments for validating Amplifier ecosystem changes.
+    Mirrors changed repos to Gitea, generates Amplifier-specific DTU profiles
+    (pypi_overrides, url_rewrites), launches the environment, and verifies it works.
 
-    Use when a developer wants to validate local changes to Amplifier repos
-    (core, modules, bundles, foundation, app-cli) in an isolated environment.
-    The agent handles the full setup: understanding what changed, mirroring to
-    Gitea, generating the profile, launching the DTU, and verifying it works.
+    Use when a developer wants to test local changes to Amplifier repos (core, modules,
+    bundles, foundation, app-cli) in an isolated container environment before merging.
 
-    **Authoritative on:** Amplifier ecosystem DTU profile generation, repo
-    classification, Gitea mirror management, multi-repo change coordination,
-    end-to-end DTU launch and verification for Amplifier development
-
-    **MUST be used for:**
-    - Setting up DTU environments for Amplifier amplifier tester
-    - Generating DTU profiles tailored to specific Amplifier change types
-    - Coordinating Gitea mirrors for changed Amplifier repos
+    **Authoritative on:** Amplifier-specific DTU profile generation — Gitea mirroring,
+    pypi_overrides for amplifier-core, url_rewrites for modules/bundles/foundation,
+    multi-repo change coordination, end-to-end DTU launch and verification
 
     <example>
     Context: Developer changed a module and wants to test it
@@ -49,22 +42,6 @@ meta:
     <commentary>
     Multi-repo change. Agent generates a single profile with pypi_overrides
     for core AND url_rewrites for the module.
-    </commentary>
-    </example>
-
-    <example>
-    Context: Developer is in a workspace and wants to validate what they've been working on
-    user: 'Can you set up a digital twin to validate my changes?'
-    assistant: |
-      delegate(
-          agent="amplifier-tester:setup-digital-twin",
-          instruction="Set up a DTU to validate the user's changes. Explore the workspace to determine what repos have been modified.",
-          context_depth="recent",
-          context_scope="conversation",
-      )
-    <commentary>
-    No explicit repos given. Agent explores the workspace, finds modified repos,
-    and asks the user to confirm before proceeding.
     </commentary>
     </example>
 model_role: [reasoning, coding, general]
