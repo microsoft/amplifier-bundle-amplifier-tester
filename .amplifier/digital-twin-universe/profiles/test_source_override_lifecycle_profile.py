@@ -20,7 +20,7 @@ def load_profile():
         return yaml.safe_load(f)
 
 
-# ── existence ────────────────────────────────────────────────────────────────
+# ── existence ──────────────────────────────────────────────────────────────
 
 def test_profile_file_exists():
     """Profile YAML file must exist on disk."""
@@ -29,7 +29,7 @@ def test_profile_file_exists():
     )
 
 
-# ── top-level structure ───────────────────────────────────────────────────────
+# ── top-level structure ────────────────────────────────────────────────────
 
 def test_profile_has_required_top_level_keys():
     """Profile must have name, description, base, passthrough, provision, update, readiness."""
@@ -50,7 +50,7 @@ def test_profile_base_image():
     assert profile["base"]["image"] == "ubuntu:24.04"
 
 
-# ── passthrough ───────────────────────────────────────────────────────────────
+# ── passthrough ────────────────────────────────────────────────────────────
 
 def test_passthrough_forwards_anthropic_key():
     """passthrough must forward the Anthropic API key (same as Profile 1)."""
@@ -62,7 +62,7 @@ def test_passthrough_forwards_anthropic_key():
     assert anthropic_svc.get("key_env") == "ANTHROPIC_API_KEY"
 
 
-# ── provision section ─────────────────────────────────────────────────────────
+# ── provision section ──────────────────────────────────────────────────────
 
 def _provision_cmds_text(profile):
     """Return all provision setup_cmds joined as a single string for scanning."""
@@ -136,7 +136,7 @@ def test_provision_pth_snapshot():
     assert "pth" in text.lower()
 
 
-# ── update section ────────────────────────────────────────────────────────────
+# ── update section ────────────────────────────────────────────────────────
 
 def _update_cmds_text(profile):
     """Return all update cmds joined as a single string for scanning."""
@@ -186,7 +186,7 @@ def test_update_d5_documented_as_comment():
     assert "D5" in raw, "D5 scenario should be referenced in the profile"
 
 
-# ── readiness ─────────────────────────────────────────────────────────────────
+# ── readiness ──────────────────────────────────────────────────────────────
 
 def test_readiness_amplifier_installed():
     """readiness must include an amplifier --version check."""
