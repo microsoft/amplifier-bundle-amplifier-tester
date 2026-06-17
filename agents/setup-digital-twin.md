@@ -406,10 +406,15 @@ update:
   refresh_pypi: true  # only if core changes are present, otherwise omit
   cmds:
     - amplifier update --yes --force
+    # Warm-up: trigger lazy provider install now so the post-update readiness
+    # smoke doesn't race the cold install and hit the 30s timeout.
+    - 'amplifier run "Say exactly: warmup-ok"'
 
 readiness:
   - name: amplifier-installed
     command: amplifier --version
+  - name: providers-smoke
+    command: 'amplifier run "Say exactly: dtu-ready"'
 ```
 
 **Assembly rules:**
@@ -437,6 +442,19 @@ readiness:
   `bash -lc` invocation (setup_cmds, update.cmds, readiness commands, `exec`)
   via `/etc/profile.d/dtu-env.sh`. Do NOT add inline `export PATH=...`
   prefixes -- they are redundant and accumulate as maintenance debt.
+- **NEVER use `rm -rf ~/.amplifier/cache` (or any direct cache deletion) in
+  `setup_cmds` or `update.cmds`.** Amplifier's provider modules are installed
+  as editable packages (`uv pip install -e`) whose source trees live inside
+  the cache. Deleting the cache leaves those installs dangling and yields
+  "No providers available" on the next run. To force a clean re-pull after a
+  source change, use `amplifier reset --remove cache -y` — it clears the cache
+  AND reinstalls, so the editable installs are re-created correctly.
+- **Provider warm-up is load-bearing.** The first `amplifier run` on a cold
+  or just-reset cache installs provider modules lazily and can exceed the
+  readiness command's 30 s timeout, causing a false-RED smoke. End both
+  `setup_cmds` and `update.cmds` with
+  `'amplifier run "Say exactly: warmup-ok"'` to seed the install before
+  the readiness poll fires.
 
 
 ### 7. Launch the DTU
