@@ -187,6 +187,132 @@ When `amplifier-foundation` is among the changed repos:
    craft a targeted test.
 
 
+### Install/Update Changes
+
+When `install-update` is among the change types:
+
+This check type covers install/update pipeline verification. Assertions run in
+two phases: **baseline** (after every lifecycle phase) and one of three
+**phase-specific** groups (post-install, post-update, or post-override)
+depending on what the test exercised.
+
+
+#### Baseline Assertions
+
+Run after every lifecycle phase — install, update, and override apply.
+
+10. **PTH_INTEGRITY — .pth files point at real directories:**
+    ```bash
+    amplifier-digital-twin exec <id> -- bash -c "find \$(python3 -c 'import site; print(site.getsitepackages()[0])') -name '*.pth' | xargs grep -l .amplifier/cache | while read pth; do dir=\$(cat \"\$pth\"); [ -d \"\$dir\" ] || echo \"FAIL: \$pth -> \$dir\"; done"
+    ```
+    Expected: No `FAIL:` lines in output, exit code 0. Every `.pth` file
+    referencing `~/.amplifier/cache/` must point at a directory that exists
+    on disk.
+
+11. **IMPORT_SMOKE — every configured provider is importable:**
+    For every provider listed in `settings.yaml` or `install-state.json`:
+    ```bash
+    amplifier-digital-twin exec <id> -- python -c "import amplifier_module_provider_<X>"
+    ```
+    Expected: Exit code 0 for each provider.
+
+12. **STATE_CONSISTENT — install-state.json has no stale entries:**
+    ```bash
+    amplifier-digital-twin exec <id> -- python3 -c "
+    import json, pathlib, sys
+    state = json.loads(pathlib.Path('/root/.amplifier/cache/install-state.json').read_text())
+    stale = [k for k, v in state.items() if not pathlib.Path(v['path']).exists()]
+    if stale: sys.exit('FAIL stale entries: ' + str(stale))
+    "
+    ```
+    Expected: No output, exit code 0. Every `path` key in `install-state.json`
+    must point at a directory that exists on disk.
+
+13. **SESSION_VIABLE — full stack responds with sentinel:**
+    ```bash
+    amplifier-digital-twin exec --stream <id> -- amplifier run "Say exactly: install-verify-ok"
+    ```
+    Expected: Response contains `install-verify-ok`, exit code 0.
+
+
+#### Post-Install Assertions
+
+Run after a fresh install and first-run sequence.
+
+14. **BINARY_EXISTS — `amplifier` binary lives under the uv tool dir:**
+    ```bash
+    amplifier-digital-twin exec <id> -- which amplifier
+    ```
+    Expected: Resolved path is under the uv tool directory
+    (e.g. `/root/.local/share/uv/tools/`), exit code 0.
+
+15. **VERSION_PARSE — `amplifier --version` emits a parseable string:**
+    ```bash
+    amplifier-digital-twin exec <id> -- amplifier --version
+    ```
+    Expected: Output matches `amplifier, version YYYY.MM.DD-hash (core X.Y.Z)`,
+    exit code 0.
+
+16. **PTH_CREATED — .pth files exist for every configured provider:**
+    ```bash
+    amplifier-digital-twin exec <id> -- bash -c "find \$(python3 -c 'import site; print(site.getsitepackages()[0])') -name '*.pth' | xargs grep -l .amplifier/cache | wc -l"
+    ```
+    Expected: Count > 0, exit code 0.
+
+
+#### Post-Update Assertions
+
+Run after `amplifier update` when hash changes are expected.
+
+17. **PTH_TARGETS_CHANGED — .pth targets updated for re-hashed modules:**
+    Take snapshots of `~/.amplifier/cache/install-state.json` before and after
+    the update. For each module whose hash changed, the `.pth` target directory
+    must differ between snapshots.
+    Expected: No module with a changed hash retains its pre-update target path
+    in the `.pth` file.
+
+18. **OLD_DIRS_ABSENT — orphan hash-suffixed dirs were removed:**
+    ```bash
+    amplifier-digital-twin exec <id> -- ls ~/.amplifier/cache/
+    ```
+    Compare against the pre-update directory listing. Old hash-suffixed
+    directories for updated modules must be absent — `update_module()` must
+    delete them, not leave orphan dirs accumulating.
+    Expected: Pre-update hash dirs are gone for every module that was
+    re-installed.
+
+19. **STATE_KEYS_MATCH_PTH — install-state.json paths match .pth targets exactly:**
+    For each provider, the `path` value in `install-state.json` must equal the
+    target line in the corresponding `.pth` file. No stale keys pointing at old
+    hashes.
+    Expected: Zero mismatches between `install-state.json` path keys and `.pth`
+    targets.
+
+
+#### Post-Override Assertions
+
+Run after `amplifier source add` applies an override.
+
+20. **OVERRIDE_ACTIVE — `source show` reports the override path:**
+    ```bash
+    amplifier-digital-twin exec <id> -- amplifier source show provider-<X>
+    ```
+    Expected: Output reports the override path or fork URL, not the default
+    upstream URL.
+
+21. **PTH_POINTS_TO_OVERRIDE — .pth target resolves to the override root:**
+    Inspect the `.pth` file for the overridden provider. For local overrides,
+    the target must be the literal local directory. For git fork overrides, the
+    target must be the fork's hash-suffixed cache directory.
+    Expected: `.pth` target matches the expected override root.
+
+22. **OVERRIDE_IMPORTABLE — overridden module resolves to the override root:**
+    ```bash
+    amplifier-digital-twin exec <id> -- python3 -c "import amplifier_module_provider_<X>; print(amplifier_module_provider_<X>.__file__)"
+    ```
+    Expected: `__file__` path is under the expected override root, exit code 0.
+
+
 ## Reporting Results
 
 After running all applicable checks, report a summary:

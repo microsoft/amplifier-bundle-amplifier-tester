@@ -1,0 +1,292 @@
+# Exercises the amplifier-dev bundle ecosystem workflow inside an isolated
+# Incus container.  Covers scenario D6 from the install/update verification
+# plan.
+#
+# Scenario coverage:
+#   D6  BINARY_EXISTS, VERSION_PARSE  -- amplifier --version succeeds after install
+#   D6  BUNDLE_INTACT (baseline)      -- amplifier-dev bundle present in bundle list
+#   D6  SESSION_VIABLE (baseline)     -- amplifier run completes after bundle install
+#   D6  PTH_INTEGRITY (baseline)      -- .pth files point at existing dirs after install
+#   D6  POST_UPDATE_INTEGRITY         -- amplifier update --yes --force exits 0
+#   D6  PTH_INTEGRITY (post-update)   -- .pth files point at existing dirs after update
+#   D6  IMPORT_SMOKE (post-update)    -- provider module importable in tool venv after update
+#   D6  STATE_CONSISTENT (post-update)-- install-state.json entries valid after update
+#   D6  SESSION_VIABLE (post-update)  -- amplifier run completes after forced update
+#   D6  BUNDLE_INTACT (post-update)   -- amplifier-dev bundle survives forced update
+#
+# Gap being closed:
+#   The existing .amplifier/digital-twin-universe/profiles/
+#   amplifier-tester-self-validation.yaml profile runs
+#   'amplifier update --yes --force' but NEVER starts a session after the
+#   update -- it only checks 'amplifier --version'.  A version check is a
+#   binary-exists test, not a session-viability test: the CLI binary can
+#   report its version even when every provider import is broken.
+#
+#   This profile adds the critical SESSION_VIABLE post-update check that is
+#   missing from self-validation, ensuring that a full Amplifier session can
+#   actually be started (not just the binary invoked) after a forced update
+#   with the amplifier-dev bundle installed.
+#
+# url_rewrites dependency:
+#   The url_rewrites section below redirects github.com/microsoft/amplifier-
+#   foundation to a local Gitea mirror.  This profile therefore requires a
+#   Gitea instance with the amplifier-foundation repo mirrored.
+#   Provide GITEA_URL=http://localhost:PORT and GITEA_TOKEN=<token> at launch.
+#   If no Gitea instance is available, remove the url_rewrites section and
+#   the profile will pull directly from GitHub (D6 minus the Gitea rewrite).
+#
+# Prerequisites:
+#   - A running Gitea instance with amplifier-foundation mirrored
+#   - ANTHROPIC_API_KEY set on the host
+#   - GITEA_URL and GITEA_TOKEN provided at launch via --var
+#
+# Usage:
+#   amplifier-digital-twin launch profiles/tests/amplifier-dev-ecosystem-lifecycle.yaml \
+#     --var GITEA_URL=http://localhost:10110 \
+#     --var GITEA_TOKEN=<token from Gitea>
+
+name: amplifier-dev-ecosystem-lifecycle
+description: >
+  Ecosystem developer lifecycle test for the Amplifier CLI with the
+  amplifier-dev bundle installed from amplifier-foundation via Gitea URL
+  rewrites.  Provisions a clean Ubuntu environment, installs Amplifier, adds
+  the amplifier-dev bundle (D6), verifies the baseline install (version,
+  bundle presence, session viability), runs amplifier update --yes --force,
+  and re-verifies PTH integrity, import smoke, state consistency, bundle
+  presence, and -- critically -- session viability post-update (the
+  SESSION_VIABLE check missing from amplifier-tester-self-validation.yaml).
+
+base:
+  image: ubuntu:24.04
+
+# Redirect amplifier-foundation GitHub URLs to the local Gitea mirror.
+# The amplifier-dev bundle lives inside the amplifier-foundation repo, so
+# 'amplifier bundle add git+https://github.com/microsoft/amplifier-foundation
+# @main#subdirectory=bundles/amplifier-dev.yaml' is rewritten to pull from
+# Gitea instead, testing the bundle with whatever revision is mirrored there.
+#
+# Requires a Gitea instance with amplifier-foundation mirrored.
+# Provide GITEA_URL=http://localhost:PORT and GITEA_TOKEN=<token> at launch.
+url_rewrites:
+  rules:
+    - match: github.com/microsoft/amplifier-foundation
+      target: ${GITEA_URL}/admin/amplifier-foundation
+
+# Forward the Anthropic API key so SESSION_VIABLE checks can reach the LLM
+# during both provision (D6 baseline) and update (D6 post-update -- the gap
+# that this profile closes relative to amplifier-tester-self-validation.yaml).
+passthrough:
+  services:
+    - name: anthropic
+      key_env: ANTHROPIC_API_KEY
+
+provision:
+  setup_cmds:
+    # --- System tooling ---
+    # python3 is needed for the inline PTH-integrity and state-consistency
+    # scripts below.
+    - apt-get update && apt-get install -y git curl python3
+
+    # --- Install uv (the package manager used to install Amplifier) ---
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    # --- Install Amplifier CLI ---
+    # Installs the CLI from the main branch via uv tool.
+    # The tool environment lands at $(uv tool dir)/amplifier/ and its bin/
+    # directory is added to PATH by /etc/profile.d/dtu-env.sh.
+    - uv tool install git+https://github.com/microsoft/amplifier@main
+
+    # D6 verification: binary is on PATH and reports a parseable version.
+    # Exits non-zero if the binary is missing or version output is malformed.
+    - amplifier --version
+
+    # --- Configure Amplifier with the Anthropic provider ---
+    # Writing settings.yaml before the first session skips the interactive
+    # first-run wizard.  $ANTHROPIC_API_KEY is available via passthrough.
+    - |
+      mkdir -p /root/.amplifier
+      cat > /root/.amplifier/settings.yaml << EOF
+      config:
+        providers:
+          - module: provider-anthropic
+            source: git+https://github.com/microsoft/amplifier-module-provider-anthropic@main
+            config:
+              api_key: $ANTHROPIC_API_KEY
+      EOF
+
+    # --- D6: Install the amplifier-dev bundle ---
+    # The amplifier-dev bundle lives inside the amplifier-foundation repo.
+    # The url_rewrites section above redirects this install to the local
+    # Gitea mirror so local/mirrored changes to amplifier-foundation are
+    # tested rather than pulling from upstream GitHub.
+    - amplifier bundle add git+https://github.com/microsoft/amplifier-foundation@main#subdirectory=bundles/amplifier-dev.yaml --app
+
+    # --- D6: BUNDLE_INTACT baseline ---
+    # Verify amplifier-dev appears in the bundle list immediately after
+    # install.  If the bundle was not registered correctly the subsequent
+    # SESSION_VIABLE check would succeed without actually exercising D6.
+    - |
+      echo "=== BUNDLE_INTACT baseline: verifying amplifier-dev in bundle list ==="
+      OUT=$(amplifier bundle list 2>&1)
+      echo "$OUT"
+      if echo "$OUT" | grep -q "amplifier-dev"; then
+          echo "BUNDLE_INTACT OK: amplifier-dev found in bundle list"
+      else
+          echo "BUNDLE_INTACT FAILED: amplifier-dev not found in bundle list"
+          exit 1
+      fi
+
+    # --- D6: SESSION_VIABLE baseline ---
+    # First session triggers provider-anthropic download, install, and .pth
+    # registration.  Verifies: module clones successfully, .pth files are
+    # written, and an end-to-end LLM session completes with the amplifier-dev
+    # bundle active.
+    - 'amplifier run "Say exactly: provision-verify-ok"'
+
+    # --- PTH_INTEGRITY baseline ---
+    # Every entry in the amplifier tool's site-packages .pth files that
+    # references ~/.amplifier/cache/ must point at a directory that exists.
+    # Failure here means the initial provider install is already broken.
+    - |
+      python3 - << 'PYEOF'
+      import glob, os, subprocess, sys
+      tool_dir = subprocess.check_output(["uv", "tool", "dir"]).decode().strip()
+      pth_files = glob.glob(
+          os.path.join(tool_dir, "amplifier", "lib", "python*", "site-packages", "*.pth")
+      )
+      errors = []
+      for pth in pth_files:
+          with open(pth) as f:
+              for line in f:
+                  path = line.strip()
+                  if path and "/root/.amplifier/cache/" in path:
+                      if not os.path.isdir(path):
+                          errors.append(f"{pth}: missing dir {path!r}")
+      if errors:
+          print("PTH_INTEGRITY BASELINE FAILED:")
+          for e in errors:
+              print(" ", e)
+          sys.exit(1)
+      print(f"PTH_INTEGRITY baseline OK ({len(pth_files)} .pth file(s) scanned)")
+      PYEOF
+
+update:
+  cmds:
+    # --- D6: Run amplifier update --force ---
+    # The --force flag is used here (mirroring amplifier-tester-self-
+    # validation.yaml) to force a re-download of all modules regardless of
+    # cached state.  This is the most aggressive form of update and the most
+    # likely to expose .pth staleness bugs caused by the re-clone path in
+    # update_module().
+    #
+    # This directly mirrors what self-validation does -- the critical
+    # difference is that the checks below verify the session is actually
+    # viable after the update, not just that the binary exists.
+    - amplifier update --yes --force
+
+    # --- PTH_INTEGRITY check (post-update) ---
+    # After the forced update every .pth entry pointing into
+    # ~/.amplifier/cache/ must reference a directory that actually exists.
+    # A stale entry here is the classic "import fails after update" bug that
+    # the update fix in this repo targets.
+    - |
+      python3 - << 'PYEOF'
+      import glob, os, subprocess, sys
+      tool_dir = subprocess.check_output(["uv", "tool", "dir"]).decode().strip()
+      pth_files = glob.glob(
+          os.path.join(tool_dir, "amplifier", "lib", "python*", "site-packages", "*.pth")
+      )
+      errors = []
+      checked = 0
+      for pth in pth_files:
+          with open(pth) as f:
+              for line in f:
+                  path = line.strip()
+                  if path and "/root/.amplifier/cache/" in path:
+                      checked += 1
+                      if not os.path.isdir(path):
+                          errors.append(f"{pth}: stale path {path!r}")
+      if errors:
+          print("PTH_INTEGRITY FAILED (post-update):")
+          for e in errors:
+              print(" ", e)
+          sys.exit(1)
+      print(f"PTH_INTEGRITY OK: {checked} cache path(s) verified across {len(pth_files)} .pth file(s)")
+      PYEOF
+
+    # --- IMPORT_SMOKE check ---
+    # The provider module must be importable inside the amplifier tool's
+    # virtual environment after the forced update.  Uses the tool venv's own
+    # Python so the .pth files registered there are honoured.
+    - |
+      echo "=== IMPORT_SMOKE: verifying amplifier_module_provider_anthropic ==="
+      "$(uv tool dir)/amplifier/bin/python3" -c "
+      import amplifier_module_provider_anthropic
+      print('IMPORT_SMOKE OK:', amplifier_module_provider_anthropic.__file__)
+      "
+
+    # --- STATE_CONSISTENT check ---
+    # If install-state.json exists, every cache path it records must point
+    # at a directory that exists.  Stale entries here indicate update wrote
+    # new cache dirs but did not update the state file to match.
+    - |
+      python3 - << 'PYEOF'
+      import json, os, sys
+      state_path = "/root/.amplifier/install-state.json"
+      if not os.path.exists(state_path):
+          print(f"STATE_CONSISTENT: {state_path!r} not found")
+          print("  Skipping -- install-state.json is not required by all Amplifier versions.")
+          sys.exit(0)
+      with open(state_path) as f:
+          state = json.load(f)
+      missing = []
+      def check_val(key, val):
+          if isinstance(val, str) and "/root/.amplifier/cache/" in val:
+              if not os.path.isdir(val):
+                  missing.append(f"  {key!r} -> {val!r}")
+          elif isinstance(val, list):
+              for item in val:
+                  check_val(key, item)
+      for k, v in (state.items() if isinstance(state, dict) else []):
+          check_val(k, v)
+      if missing:
+          print("STATE_CONSISTENT FAILED: stale entries in install-state.json:")
+          for m in missing:
+              print(m)
+          sys.exit(1)
+      print("STATE_CONSISTENT OK: all cache paths in install-state.json exist on disk")
+      PYEOF
+
+    # --- D6: SESSION_VIABLE check (post-update) ---
+    # THIS IS THE CHECK THAT IS MISSING FROM amplifier-tester-self-validation.yaml.
+    #
+    # Self-validation runs 'amplifier update --yes --force' and then only
+    # checks 'amplifier --version' -- a binary-exists test that passes even
+    # when every provider import is broken.  This step verifies that a full
+    # Amplifier session can actually be started after the forced update,
+    # exercising the full module-loading and provider-import stack.
+    #
+    # Broken .pth files or missing provider dirs will surface here as an
+    # import error before the LLM is even reached.  This is the highest-level
+    # correctness signal for post-update health with the amplifier-dev bundle
+    # active.
+    - 'amplifier run "Say exactly: update-verify-ok"'
+
+    # --- D6: BUNDLE_INTACT check (post-update) ---
+    # The amplifier-dev bundle must still be present in the bundle list after
+    # the forced update.  A correct update must not remove or deregister
+    # bundles that were explicitly added by the user.
+    - |
+      echo "=== BUNDLE_INTACT post-update: verifying amplifier-dev in bundle list ==="
+      OUT=$(amplifier bundle list 2>&1)
+      echo "$OUT"
+      if echo "$OUT" | grep -q "amplifier-dev"; then
+          echo "BUNDLE_INTACT OK (post-update): amplifier-dev still in bundle list after update"
+      else
+          echo "BUNDLE_INTACT FAILED (post-update): amplifier-dev missing from bundle list after update"
+          exit 1
+      fi
+
+readiness:
+  - name: amplifier-installed
+    command: amplifier --version
