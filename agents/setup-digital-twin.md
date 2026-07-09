@@ -392,7 +392,10 @@ provision:
               api_key: ${ANTHROPIC_API_KEY}
       EOF
 
-    # -- Bundle-specific: only for bundle-type changes --
+    # -- Bundle-specific: only for bundle-type changes. Choose the install form
+    #    to match how the user actually runs the bundle (see assembly rules).
+    #    --app COMPOSES it onto the session; to mirror a real multi-bundle
+    #    setup, add the base bundle first, then theirs with --app. --
     - amplifier bundle add git+https://github.com/microsoft/<bundle-repo>@main --app
 
     # Verify
@@ -430,7 +433,31 @@ readiness:
   - Include the `git config insteadOf` line IF step 5b triggered.
   - Mirror the user's `config.providers` verbatim into the in-DTU
     settings.yaml. Do not hard-code a single provider.
-  - Add `amplifier bundle add` lines for each bundle-type change.
+  - Add the bundle install lines for each bundle-type change. Decide the
+    install form here, based on how the user actually runs the bundle in real
+    life -- the DTU should mirror that:
+    - `amplifier bundle add <src> --app` -- COMPOSES the bundle onto the
+      session: its providers, tools, hooks, agents, and context are merged in
+      on top of the primary bundle. This is the usual choice for a bundle that
+      adds a capability. Note the primary defaults to `anchors` when none is
+      set, so bare `--app` already composes onto `anchors` (it is not truly
+      standalone).
+    - To mirror a user who runs the new bundle ALONGSIDE a specific active
+      bundle, replicate their primary too: `amplifier bundle use <base>` (after
+      registering it) THEN `amplifier bundle add <user-bundle> --app`. A DTU
+      that only composes onto `anchors` cannot surface conflicts the user hits
+      against their real active bundle.
+    - `amplifier bundle use <name>` -- sets the single active/primary bundle,
+      REPLACING the current one. Use when the bundle is meant to BE the
+      environment.
+    - `amplifier bundle add <src>` with no flag only REGISTERS it (a name->URI
+      entry under `bundle.added`); it is dormant and will NOT load.
+    - Composition merges capabilities, but a top-level `instruction` is
+      last-wins: a composed `--app` bundle that defines its own instruction
+      REPLACES the primary's instruction rather than merging it. Watch for this
+      whenever either bundle carries a system instruction.
+    - Confirm in step 9 that the bundle is actually composed (its
+      agents/commands/context are present), not merely listed by `bundle list`.
 - `update`: Always include. Set `refresh_pypi: true` when core is changed.
   Uses `amplifier update --yes --force` to refresh the environment.
 
