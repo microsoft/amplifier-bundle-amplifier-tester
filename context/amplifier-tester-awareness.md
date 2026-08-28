@@ -11,8 +11,6 @@ You have access to the Amplifier amplifier tester bundle for testing changes to 
 
 ## How to Use
 
-**ALWAYS delegate amplifier tester work to the specialized agent.** Do NOT attempt to generate DTU profiles or drive the CLI directly.
-
 Set up a DTU environment for validating Amplifier ecosystem changes:
 ```
 delegate(agent="amplifier-tester:setup-digital-twin", instruction="<what the user needs>", context_depth="all", context_scope="full")
