@@ -23,10 +23,6 @@ meta:
           context_depth="recent",
           context_scope="conversation",
       )
-    <commentary>
-    Single repo, module change. Agent mirrors to Gitea, generates a profile
-    with url_rewrites, launches DTU, and verifies.
-    </commentary>
     </example>
 
     <example>
@@ -39,10 +35,6 @@ meta:
           context_depth="recent",
           context_scope="conversation",
       )
-    <commentary>
-    Multi-repo change. Agent generates a single profile with pypi_overrides
-    for core AND url_rewrites for the module.
-    </commentary>
     </example>
 model_role: [reasoning, coding, general]
 ---

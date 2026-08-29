@@ -13,7 +13,7 @@ You have access to the Amplifier amplifier tester bundle for testing changes to 
 
 Set up a DTU environment for validating Amplifier ecosystem changes:
 ```
-delegate(agent="amplifier-tester:setup-digital-twin", instruction="<what the user needs>", context_depth="all", context_scope="full")
+delegate(agent="amplifier-tester:setup-digital-twin", instruction="<what the user needs>", context_depth="recent", context_scope="conversation")
 ```
 
 For additional targeted validation checks inside an existing DTU:
