@@ -23,9 +23,6 @@ meta:
           context_depth="recent",
           context_scope="agents",
       )
-    <commentary>
-    Passes DTU ID and change types so the validator knows what to check.
-    </commentary>
     </example>
 
     <example>
@@ -38,9 +35,6 @@ meta:
           context_depth="recent",
           context_scope="agents",
       )
-    <commentary>
-    Multi-repo validation. Validator checks core version AND module loading.
-    </commentary>
     </example>
 model_role: [coding, general]
 ---
