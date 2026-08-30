@@ -20,3 +20,15 @@ For additional targeted validation checks inside an existing DTU:
 ```
 delegate(agent="amplifier-tester:validator", instruction="<DTU instance ID and what to check>", context_depth="recent", context_scope="agents")
 ```
+
+## ⚠️ Resource Accounting (orchestrator responsibility)
+
+Repeated `setup-digital-twin` delegations **accumulate** environments. Each invocation launches its own DTU (and may create or reuse a Gitea instance); nothing tears them down automatically. The sub-agent is **stateless** — it cannot see how many siblings you have already spawned or how many environments are already live.
+
+The **orchestrator owns the cumulative ledger and the cap** — the sub-agent cannot, so you must:
+
+- Track how many DTU environments you have launched across all delegations.
+- Set and enforce a hard cap on concurrent environments.
+- Pass the **current live count and the remaining budget** in every `setup-digital-twin` delegation instruction, so the sub-agent can confirm scope before adding another.
+
+Delegating N times without passing a running total will silently launch N environments and can exhaust host disk.

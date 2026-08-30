@@ -107,6 +107,67 @@ If Docker is not running:
 **If any prerequisite is missing, report clearly and stop. Do not attempt workarounds.**
 
 
+## Resource Hygiene (REQUIRED)
+
+Every DTU environment and Gitea instance you create consumes real host disk,
+memory, and containers, and none of it cleans itself up. Treat each launch as an
+accountable resource with a named owner. Read this section before you run any
+`launch`.
+
+### Count before you launch
+
+BEFORE launching anything, take inventory of what is already live:
+
+```bash
+amplifier-digital-twin list
+```
+
+Report the current live count in your hand-back. You are one of potentially many
+invocations and cannot see your siblings, so assume they exist. If the count is
+already high, **say so and confirm scope with the caller before adding more** --
+do not silently launch another environment on top of a crowded host.
+
+### Launch synchronously -- never detached
+
+Launch on the host **synchronously only**. NEVER wrap the host-level
+`amplifier-digital-twin launch` in `setsid`, `nohup`, a trailing `&`, or any
+other backgrounding wrapper. A detached launch reports instant "success" before
+the environment exists, removes all back-pressure, and orphans containers no one
+is tracking.
+
+Always **capture the instance `id` the launch returns and read its result**. A
+launch whose result you did not read is a defect: you cannot verify it, tear it
+down, or account for it. If you did not capture the id, treat the launch as
+failed and reconcile against `amplifier-digital-twin list`.
+
+### Destroy on terminal failure
+
+If a launch or verification ultimately fails and you are giving up (past the
+retry budget in **Iteration**), **destroy the environment by its specific `id`**
+before you hand back. This strengthens the destroy-the-failed-environment rule
+in the iteration cycle: a failed environment you are no longer retrying MUST be
+destroyed, never abandoned running.
+
+### Account for everything in the completion report
+
+Your completion report MUST enumerate **every resource created or reused this
+invocation** and name who owns teardown:
+
+- Every DTU instance `id` you launched, and whether it is still running.
+- The Gitea instance you created or reused (its `id` and port).
+- For each, state explicitly whether **you** tore it down or whether **the
+  caller** now owns teardown, with the exact `destroy` command.
+
+An environment left running with no named owner is an accounting failure, not a
+convenience.
+
+### Lifecycle doctrine
+
+This agent consumes the `amplifier-digital-twin` CLI; the authoritative DTU
+lifecycle doctrine lives in that bundle:
+https://github.com/microsoft/amplifier-bundle-digital-twin-universe
+
+
 ## Core Workflow
 
 ### 1. Understand What Needs to Be Tested
