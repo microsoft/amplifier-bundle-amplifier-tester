@@ -108,8 +108,44 @@ had no business asserting impossibility a third time without measuring it:
     -> not currently holding 'model_performance-j1e6' in this session --
        refusing to release an item this session did not claim
 
-Both legs refused, mutating nothing. Claiming is the only route to holding, and
-holding is the only route to releasing, so the release is unreachable from here.
+Both legs refused, mutating nothing.
+
+**Correction to this file's own earlier wording: "unreachable" was an
+overstatement.** A mechanical path to satisfying the literal step does exist,
+and honesty requires naming it rather than declaring the door shut:
+
+    work_reopen(project="model_performance", item_id="model_performance-j1e6",
+                reason="...")            # claim=true by default -> this session HOLDS it
+    work_release(id="model_performance-j1e6")   # would then succeed
+
+So the release is **not unreachable — it is reachable at a cost this lane has
+no authority to spend**, which is a different claim and the accurate one.
+
+**Why this lane did not take that path, and will not without an explicit
+instruction from the intent steward or the manager:**
+
+1. `work_reopen` **destroys a published record's finality.** It clears
+   `closed_at`, so the item re-lands on today's date and every throughput
+   roll-up in the program moves by one item. The tool surfaces that cost
+   (`closed_at_cleared`, `previous_closed_at`) precisely because it is not a
+   free bookkeeping nudge.
+2. **The resolution it would reopen is not this lane's work.** It is another
+   lane's, covering wayfinder.
+3. **It would satisfy a checkbox by mutating shared state.** Reopening a closed
+   item so that a release call can be made to succeed is completing the
+   *appearance* of the procedure, not its purpose. The purpose of the release
+   leg is to free custody that a lane is holding. This lane holds nothing —
+   `work_list(status="held")` proves it — so there is no custody to free, and
+   the reopen would manufacture custody solely to hand it back.
+4. It is explicitly the manager's call, and a prior lane's erratum already
+   flagged the same decision as theirs.
+
+**The honest state, therefore: one required step is unmet, a path to it exists,
+and this lane is declining to take that path on its own authority rather than
+claiming the door is locked.** If the manager or the intent steward authorises
+the reopen — perhaps because the item genuinely should be reopened anyway, the
+directive being roughly a handful of nineteen repos done — the two calls above
+complete it in seconds.
 
 ### What the queue actually shows — and a finding the manager needs
 
