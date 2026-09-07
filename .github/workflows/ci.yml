@@ -61,14 +61,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # No `enable-cache:`. It caches keyed on **/uv.lock, and this repo
-      # commits no lockfile anywhere, so setup-uv HARD-FAILS the step with
-      # "No file matched to [**/uv.lock]" -- a sibling lane observed exactly
-      # that turn its first red-proof run into a setup error before ruff or
-      # pytest ever ran, which is a red that proves nothing. (Note also that
-      # `enable-caching:` is not a valid input at all and is silently
-      # ignored; do not "fix" one into the other.) These jobs install a
-      # handful of small wheels; the cache was never worth a failure mode.
+      # No `enable-cache:`, deliberately, and the reason is a DISPUTED
+      # measurement rather than a settled fact -- so it is recorded as one.
+      # `enable-cache: true` activates a cache keyed on **/uv.lock, and this
+      # repo commits no lockfile anywhere. One sibling lane (wayfinder)
+      # observed that hard-fail the step with "No file matched to
+      # [**/uv.lock]" before ruff or pytest ever ran -- a red run that proves
+      # nothing. Another (ios-tester) measured it as harmless on a newer
+      # setup-uv. Neither was measured on THIS repo. These jobs install a
+      # handful of small wheels, so the cache is not worth resolving that
+      # disagreement here; omitting it is correct under either reading.
+      #
+      # Separately: `enable-caching:` is not a valid input at all and is
+      # silently ignored. Do not "fix" that spelling into `enable-cache:` in
+      # a lockfile-less repo -- that turns a no-op into the failure mode
+      # above.
       - uses: astral-sh/setup-uv@v4
 
       - name: Lint (ruff, pinned)
@@ -113,7 +120,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # No `enable-cache:` -- see the lint job for why.
+      # No `enable-cache:` -- see the lint job for why (a disputed sibling
+      # measurement, not a settled fact; omitting it is correct either way).
       - uses: astral-sh/setup-uv@v4
 
       - name: Run the standing test command
