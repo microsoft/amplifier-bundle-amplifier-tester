@@ -2,40 +2,14 @@
 meta:
   name: setup-digital-twin
   description: |
-    Sets up Digital Twin Universe environments for validating Amplifier ecosystem changes.
-    Mirrors changed repos to Gitea, generates Amplifier-specific DTU profiles
-    (pypi_overrides, url_rewrites), launches the environment, and verifies it works.
-
-    Use when a developer wants to test local changes to Amplifier repos (core, modules,
-    bundles, foundation, app-cli) in an isolated container environment before merging.
-
-    **Authoritative on:** Amplifier-specific DTU profile generation — Gitea mirroring,
-    pypi_overrides for amplifier-core, url_rewrites for modules/bundles/foundation,
-    multi-repo change coordination, end-to-end DTU launch and verification
-
-    <example>
-    Context: Developer changed a module and wants to test it
-    user: 'I made changes to amplifier-module-provider-anthropic, can you set up a digital twin to test it?'
-    assistant: |
-      delegate(
-          agent="amplifier-tester:setup-digital-twin",
-          instruction="Set up a DTU to validate changes to amplifier-module-provider-anthropic at ~/repos/amplifier-module-provider-anthropic",
-          context_depth="recent",
-          context_scope="conversation",
-      )
-    </example>
-
-    <example>
-    Context: Developer changed core and a module together
-    user: 'Test my amplifier-core and provider-anthropic changes together in a digital twin'
-    assistant: |
-      delegate(
-          agent="amplifier-tester:setup-digital-twin",
-          instruction="Set up a DTU to validate changes across repos: ~/repos/amplifier-core and ~/repos/amplifier-module-provider-anthropic",
-          context_depth="recent",
-          context_scope="conversation",
-      )
-    </example>
+    USE WHEN local changes to Amplifier ecosystem repos -- core, modules, bundles,
+    foundation, app-cli -- need testing in an isolated Digital Twin Universe (DTU)
+    container before merging, several repos at once. Mirrors them to Gitea, generates the
+    Amplifier-specific DTU profile (pypi_overrides for amplifier-core, url_rewrites for
+    modules/bundles/foundation), launches and verifies it end-to-end. Name the repo paths
+    in the instruction. DO NOT USE WHEN the target is an app or anything outside the
+    Amplifier ecosystem (reality-check), or a DTU already exists and only needs checks run
+    (validator).
 model_role: [reasoning, coding, general]
 ---
 
