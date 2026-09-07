@@ -1,0 +1,30 @@
+..................                                                       [100%]
+18 passed in 0.01s
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/bkrabach/dev/hw-model-performance/lanes/3ahq-leanhead-amplifier-tester/amplifier-bundle-amplifier-tester
+plugins: amplifier-core-1.6.0, timeout-2.4.0, pytest_httpserver-1.1.4, anyio-4.12.1, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 18 items
+
+tests/test_lean_head_guardrail.py::TestBytePinAgainstTheV1Head::test_shipped_file_is_byte_identical_to_v1 PASSED [  5%]
+tests/test_lean_head_guardrail.py::TestBytePinAgainstTheV1Head::test_the_v1_fixture_is_the_measured_size PASSED [ 11%]
+tests/test_lean_head_guardrail.py::TestBytePinAgainstTheV1Head::test_the_stock_fixture_is_the_measured_size PASSED [ 16%]
+tests/test_lean_head_guardrail.py::TestCharBudget::test_shipped_file_within_budget PASSED [ 22%]
+tests/test_lean_head_guardrail.py::TestCharBudget::test_the_recorded_saving_has_not_moved PASSED [ 27%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_required_rules_survive[resource accounting (orchestrator responsibility)] PASSED [ 33%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_required_rules_survive[routing away from non-Amplifier software] PASSED [ 38%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_required_rules_survive[scope of the bundle] PASSED [ 44%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_the_rule_check_is_wired_to_the_rules_not_the_wording PASSED [ 50%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_delegation_commands_survive_verbatim[delegate(agent="amplifier-tester:setup-digital-twin", instruction="<what the user needs>", context_depth="recent", context_scope="conversation")] PASSED [ 55%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_delegation_commands_survive_verbatim[delegate(agent="amplifier-tester:validator", instruction="<DTU instance ID and what to check>", context_depth="recent", context_scope="agents")] PASSED [ 61%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_no_mechanically_extracted_stock_token_was_dropped PASSED [ 66%]
+tests/test_lean_head_guardrail.py::TestFidelity::test_the_extractor_is_known_to_be_thin_here PASSED [ 72%]
+tests/test_lean_head_guardrail.py::TestByteStability::test_shipped_file_carries_no_volatile_token PASSED [ 77%]
+tests/test_lean_head_guardrail.py::TestByteStability::test_reading_the_file_twice_gives_the_same_bytes PASSED [ 83%]
+tests/test_lean_head_guardrail.py::TestCitedResults::test_cited_quality_lower_bound_clears_the_frozen_margin PASSED [ 88%]
+tests/test_lean_head_guardrail.py::TestCitedResults::test_the_frozen_margin_has_not_been_loosened PASSED [ 94%]
+tests/test_lean_head_guardrail.py::TestCitedResults::test_the_cited_cost_effect_excludes_zero PASSED [100%]
+
+============================== 18 passed in 0.02s ==============================
