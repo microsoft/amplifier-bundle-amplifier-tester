@@ -380,9 +380,9 @@ the measurement method used instead.
 | Bodies byte-identical, md5 quoted both sides | **DONE** — §4 |
 | Before/after char counts per agent + repo total, vs CURRENT `origin/main` | **DONE** — §1, §2. Baseline re-derived; census was 74 chars high |
 | `validate-agents` on the branch, verdict quoted, agent count quoted | **DONE** — §5. `critical` (4 errors) → **PASS WITH WARNINGS** (0 errors); 2 agents across 1 location |
-| CI green where the repo has CI | **DONE** — repo has CI; §6. Local reproduction of all three jobs green |
+| CI green where the repo has CI | **DONE** — repo has CI; §6. All 5 checks green on PR #20: Lint pass, Tests (3.11) pass, Tests (3.13) pass, Bundle structure (YAML) pass, license/cla pass |
 | Anything already compliant, left unedited and named | **N/A** — both agents were out of policy on all four counts; nothing in scope was already compliant. No other file registers a catalog row |
-| DRAFT PR, not merged | **DONE** — see `DONE.json` |
+| DRAFT PR, not merged | **DONE** — PR #20 on `microsoft/amplifier-bundle-amplifier-tester`, draft, not merged |
 
 **Outcome branch A (RESOLVED at the draft PR).** No deliverable was NOT-POSSIBLE.
 
