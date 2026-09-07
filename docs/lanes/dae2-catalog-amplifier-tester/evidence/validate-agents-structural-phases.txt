@@ -1,0 +1,22 @@
+### validate-agents deterministic phases (0-3), recipe v1.8.0
+### recipe: foundation:recipes/validate-agents.yaml (cached copy)
+### runner: docs/lanes/dae2-catalog-amplifier-tester/run_validate_phases.py
+###   -- executes the recipe's own bash/python heredocs verbatim; no LLM, $0.
+
+--- STOCK (origin/main 3ffbcd4, extracted via 'git archive') ---
+repo: <stock-tree>
+agents discovered: 2
+structural summary: {'total': 2, 'passed': 0, 'errors': 4, 'warnings': 2}
+quality_level: critical
+quality summary: {'total': 2, 'good': 0, 'polish': 0, 'needs_work': 0, 'critical': 2}
+  setup-digital-twin       chars= 1565 examples=2 commentary=0 errors=['DESCRIPTION_EXCESSIVE', 'EXAMPLE_BLOCK_PRESENT'] warnings=['NO_TOOLS_SECTION']
+  validator                chars= 1342 examples=2 commentary=0 errors=['DESCRIPTION_EXCESSIVE', 'EXAMPLE_BLOCK_PRESENT'] warnings=['NO_TOOLS_SECTION']
+
+--- BRANCH (lane/dae2-catalog-amplifier-tester) ---
+repo: <repo>
+agents discovered: 2
+structural summary: {'total': 2, 'passed': 2, 'errors': 0, 'warnings': 2}
+quality_level: needs_work
+quality summary: {'total': 2, 'good': 0, 'polish': 0, 'needs_work': 2, 'critical': 0}
+  setup-digital-twin       chars=  595 examples=0 commentary=0 errors=[] warnings=['NO_TOOLS_SECTION']
+  validator                chars=  592 examples=0 commentary=0 errors=[] warnings=['NO_TOOLS_SECTION']

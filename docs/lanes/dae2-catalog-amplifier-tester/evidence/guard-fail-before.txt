@@ -1,0 +1,14 @@
+### tests/test_agent_description_policy.py run against STOCK (origin/main 3ffbcd4)
+### repo tree extracted with 'git archive origin/main'; guard copied in unchanged
+
+.FFFFFFFF                                                                [100%]
+=========================== short test summary info ============================
+FAILED tests/test_agent_description_policy.py::test_description_is_within_budget[agents/setup-digital-twin.md]
+FAILED tests/test_agent_description_policy.py::test_description_is_within_budget[agents/validator.md]
+FAILED tests/test_agent_description_policy.py::test_description_is_trigger_first[agents/setup-digital-twin.md]
+FAILED tests/test_agent_description_policy.py::test_description_is_trigger_first[agents/validator.md]
+FAILED tests/test_agent_description_policy.py::test_description_carries_both_routing_clauses[agents/setup-digital-twin.md]
+FAILED tests/test_agent_description_policy.py::test_description_carries_both_routing_clauses[agents/validator.md]
+FAILED tests/test_agent_description_policy.py::test_description_carries_no_example_markup[agents/setup-digital-twin.md]
+FAILED tests/test_agent_description_policy.py::test_description_carries_no_example_markup[agents/validator.md]
+8 failed, 1 passed in 0.03s

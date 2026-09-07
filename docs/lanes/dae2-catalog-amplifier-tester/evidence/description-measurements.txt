@@ -1,0 +1,13 @@
+### meta.description char counts and body md5 -- stock (origin/main 3ffbcd4) vs branch
+### description length = the PARSED YAML scalar, incl. the one trailing newline the
+### '|' literal block appends. Measured identically on both sides.
+
+agent                        stock    lean    delta   <=600  body md5 stock == lean
+setup-digital-twin            1565     595     -970      OK  356318140ab85709b867bc6f8e3dcaca == 356318140ab85709b867bc6f8e3dcaca  True
+validator                     1342     592     -750      OK  4f59c94bd44e4e011dd3c594ba83c99a == 4f59c94bd44e4e011dd3c594ba83c99a  True
+REPO TOTAL                    2907    1187    -1720   (-59.2%)
+
+<example> blocks: stock 4 -> lean 0.  <commentary> blocks: stock 0 -> lean 0.
+Frontmatter keys unchanged on both files: meta.name, meta.description, model_role.
+  setup-digital-twin: model_role=['reasoning', 'coding', 'general']
+  validator: model_role=['coding', 'general']
