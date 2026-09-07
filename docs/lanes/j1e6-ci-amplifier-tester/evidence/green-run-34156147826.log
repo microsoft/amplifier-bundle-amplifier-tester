@@ -1,0 +1,697 @@
+Lint	Set up job	﻿2026-09-07T19:35:24.8091512Z Current runner version: '2.337.0'
+Lint	Set up job	2026-09-07T19:35:24.8127786Z ##[group]Runner Image Provisioner
+Lint	Set up job	2026-09-07T19:35:24.8129498Z Hosted Compute Agent
+Lint	Set up job	2026-09-07T19:35:24.8130524Z Version: 20260828.587
+Lint	Set up job	2026-09-07T19:35:24.8131720Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Lint	Set up job	2026-09-07T19:35:24.8133088Z Build Date: 2026-08-28T16:44:25Z
+Lint	Set up job	2026-09-07T19:35:24.8134270Z Worker ID: {3b637832-c6b0-4c60-b6f2-7b58cec56414}
+Lint	Set up job	2026-09-07T19:35:24.8135531Z Azure Region: eastus
+Lint	Set up job	2026-09-07T19:35:24.8136585Z ##[endgroup]
+Lint	Set up job	2026-09-07T19:35:24.8139478Z ##[group]Operating System
+Lint	Set up job	2026-09-07T19:35:24.8140672Z Ubuntu
+Lint	Set up job	2026-09-07T19:35:24.8141607Z 24.04.4
+Lint	Set up job	2026-09-07T19:35:24.8142614Z LTS
+Lint	Set up job	2026-09-07T19:35:24.8143482Z ##[endgroup]
+Lint	Set up job	2026-09-07T19:35:24.8144493Z ##[group]Runner Image
+Lint	Set up job	2026-09-07T19:35:24.8145636Z Image: ubuntu-24.04
+Lint	Set up job	2026-09-07T19:35:24.8146628Z Version: 20260831.293.1
+Lint	Set up job	2026-09-07T19:35:24.8148822Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260831.293/images/ubuntu/Ubuntu2404-Readme.md
+Lint	Set up job	2026-09-07T19:35:24.8151856Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260831.293
+Lint	Set up job	2026-09-07T19:35:24.8153679Z ##[endgroup]
+Lint	Set up job	2026-09-07T19:35:24.8155581Z ##[group]GITHUB_TOKEN Permissions
+Lint	Set up job	2026-09-07T19:35:24.8158579Z Contents: read
+Lint	Set up job	2026-09-07T19:35:24.8159664Z Metadata: read
+Lint	Set up job	2026-09-07T19:35:24.8160709Z ##[endgroup]
+Lint	Set up job	2026-09-07T19:35:24.8163672Z Secret source: Actions
+Lint	Set up job	2026-09-07T19:35:24.8165542Z Prepare workflow directory
+Lint	Set up job	2026-09-07T19:35:24.8644156Z Prepare all required actions
+Lint	Set up job	2026-09-07T19:35:24.8715364Z Getting action download info
+Lint	Set up job	2026-09-07T19:35:25.0780619Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Lint	Set up job	2026-09-07T19:35:25.1952439Z Download action repository 'astral-sh/setup-uv@v4' (SHA:38f3f104447c67c051c4a08e39b64a148898af3a)
+Lint	Set up job	2026-09-07T19:35:25.4681729Z Complete job name: Lint
+Lint	Run actions/checkout@v4	﻿2026-09-07T19:35:25.5524340Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5533203Z ##[group]Run actions/checkout@v4
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5533974Z with:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5534549Z   repository: microsoft/amplifier-bundle-amplifier-tester
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5539022Z   token: ***
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5539480Z   ssh-strict: true
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5539934Z   ssh-user: git
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5540442Z   persist-credentials: true
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5540935Z   clean: true
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5541384Z   sparse-checkout-cone-mode: true
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5541917Z   fetch-depth: 1
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5542349Z   fetch-tags: false
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5542797Z   show-progress: true
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5543303Z   lfs: false
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5543782Z   submodules: false
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5544340Z   set-safe-directory: true
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5544855Z   allow-unsafe-pr-checkout: false
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.5545675Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6564536Z Syncing repository: microsoft/amplifier-bundle-amplifier-tester
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6567327Z ##[group]Getting Git version info
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6568784Z Working directory is '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6570256Z [command]/usr/bin/git version
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6654209Z git version 2.55.0
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6674999Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6690573Z Temporarily overriding HOME='/home/runner/work/_temp/8076e3e9-1df6-4ea2-8972-4850c10392c5' before making global git config changes
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6693626Z Adding repository directory to the temporary git global config as a safe directory
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6696919Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6748414Z Deleting the contents of '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6752487Z ##[group]Initializing the repository
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6757050Z [command]/usr/bin/git init /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6878931Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6880157Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6881348Z hint: to use in all of your new repositories, which will suppress this warning,
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6882401Z hint: call:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6883163Z hint:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6883980Z hint: 	git config --global init.defaultBranch <name>
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6885068Z hint:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6886219Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6888323Z hint: 'development'. The just-created branch can be renamed via this command:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6889789Z hint:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6890628Z hint: 	git branch -m <name>
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6891478Z hint:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6892592Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6895077Z Initialized empty Git repository in /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester/.git/
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6899301Z [command]/usr/bin/git remote add origin https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6945256Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6946694Z ##[group]Disabling automatic garbage collection
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6949221Z [command]/usr/bin/git config --local gc.auto 0
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6979044Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6980536Z ##[group]Setting up auth
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.6985673Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7016592Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7396437Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7426291Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7650027Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7677267Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7906087Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7941939Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7943386Z ##[group]Fetching the repository
+Lint	Run actions/checkout@v4	2026-09-07T19:35:25.7952895Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6:refs/remotes/pull/18/merge
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0314128Z From https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0315421Z  * [new ref]         8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6 -> pull/18/merge
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0319460Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0320505Z ##[group]Determining the checkout info
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0322397Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0327884Z [command]/usr/bin/git sparse-checkout disable
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0458741Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0462846Z ##[group]Checking out the ref
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0464569Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18/merge
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0507088Z Note: switching to 'refs/remotes/pull/18/merge'.
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0508753Z 
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0509762Z You are in 'detached HEAD' state. You can look around, make experimental
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0512276Z changes and commit them, and you can discard any commits you make in this
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0514544Z state without impacting any branches by switching back to a branch.
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0515420Z 
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0515958Z If you want to create a new branch to retain commits you create, you may
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0517273Z do so (now or later) by using -c with the switch command. Example:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0518723Z 
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0519468Z   git switch -c <new-branch-name>
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0520297Z 
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0520866Z Or undo this operation with:
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0521738Z 
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0522356Z   git switch -
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0522971Z 
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0523588Z Turn off this advice by setting config variable advice.detachedHead to false
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0524810Z 
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0526025Z HEAD is now at 8d8bf29 Merge dafb46ead4d101220af35bee15d933d28f02b302 into 40c9da3d7b37179ddffe049d5301327fa80a8cbd
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0529882Z ##[endgroup]
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0565427Z [command]/usr/bin/git log -1 --format=%H
+Lint	Run actions/checkout@v4	2026-09-07T19:35:26.0589933Z 8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6
+Lint	Run astral-sh/setup-uv@v4	﻿2026-09-07T19:35:26.0994075Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.0999026Z ##[group]Run astral-sh/setup-uv@v4
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1000200Z with:
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1001072Z   version: latest
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1007465Z   github-token: ***
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1009213Z   enable-cache: false
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1010218Z   cache-dependency-glob: **/uv.lock
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1011402Z   prune-cache: true
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1012354Z   ignore-nothing-to-cache: false
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.1013488Z ##[endgroup]
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.2444170Z (node:2257) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.2446563Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.4157920Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.12.10/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.6304823Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/df9f08c7-d99d-46e8-b69b-f32b24702316 -f /home/runner/work/_temp/ed006b84-be5c-4aaa-8acc-19dca0394b08
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.0015203Z Added /opt/hostedtoolcache/uv/0.12.10/x86_64 to the path
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.0016463Z Added /home/runner/.local/bin to the path
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.0037479Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+Lint	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.0038290Z Successfully installed uv version 0.12.10
+Lint	Lint (ruff, pinned)	﻿2026-09-07T19:35:27.0199014Z ##[group]Run uvx ruff@0.16.6 check --isolated --select E4,E7,E9,F .
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.0245406Z shell: /usr/bin/bash -e {0}
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.0245724Z env:
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.0245989Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.0246324Z ##[endgroup]
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.2072518Z Downloading ruff (9.8MiB)
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.2815542Z  Downloaded ruff
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.2842904Z Installed 1 package in 2ms
+Lint	Lint (ruff, pinned)	2026-09-07T19:35:27.3344372Z All checks passed!
+Lint	Post Run astral-sh/setup-uv@v4	﻿2026-09-07T19:35:27.3490190Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Lint	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.3491518Z Post job cleanup.
+Lint	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.4676878Z (node:2298) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.4678653Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint	Post Run actions/checkout@v4	﻿2026-09-07T19:35:27.4905783Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.4907096Z Post job cleanup.
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.5731673Z [command]/usr/bin/git version
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.5767589Z git version 2.55.0
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.5805069Z Temporarily overriding HOME='/home/runner/work/_temp/4e13ab2f-6406-43cb-a1ae-33fd300a1be9' before making global git config changes
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.5806687Z Adding repository directory to the temporary git global config as a safe directory
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.5810846Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.5846685Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.5880259Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.6100889Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.6125749Z http.https://github.com/.extraheader
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.6136224Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.6168458Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.6384330Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint	Post Run actions/checkout@v4	2026-09-07T19:35:27.6420322Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint	Complete job	﻿2026-09-07T19:35:27.6808913Z Cleaning up orphan processes
+Lint	Complete job	2026-09-07T19:35:27.7140867Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, astral-sh/setup-uv@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.13)	Set up job	﻿2026-09-07T19:35:25.1398609Z Current runner version: '2.337.0'
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1424300Z ##[group]Runner Image Provisioner
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1425198Z Hosted Compute Agent
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1425886Z Version: 20260828.587
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1426901Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1427773Z Build Date: 2026-08-28T16:44:25Z
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1428558Z Worker ID: {ae5b360e-feb0-4059-ad92-c3964872223b}
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1429338Z Azure Region: northcentralus
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1430065Z ##[endgroup]
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1431882Z ##[group]Operating System
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1432543Z Ubuntu
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1433174Z 24.04.4
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1433719Z LTS
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1434244Z ##[endgroup]
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1434925Z ##[group]Runner Image
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1435558Z Image: ubuntu-24.04
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1436190Z Version: 20260831.293.1
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1437591Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260831.293/images/ubuntu/Ubuntu2404-Readme.md
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1439597Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260831.293
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1440641Z ##[endgroup]
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1441841Z ##[group]GITHUB_TOKEN Permissions
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1444048Z Contents: read
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1444844Z Metadata: read
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1445432Z ##[endgroup]
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1447663Z Secret source: Actions
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1449097Z Prepare workflow directory
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1783367Z Prepare all required actions
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.1832490Z Getting action download info
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.4320946Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:25.5201933Z Download action repository 'astral-sh/setup-uv@v4' (SHA:38f3f104447c67c051c4a08e39b64a148898af3a)
+Tests (Python 3.13)	Set up job	2026-09-07T19:35:26.0479834Z Complete job name: Tests (Python 3.13)
+Tests (Python 3.13)	Run actions/checkout@v4	﻿2026-09-07T19:35:26.1211236Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1220226Z ##[group]Run actions/checkout@v4
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1220958Z with:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1221519Z   repository: microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1225432Z   token: ***
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1225879Z   ssh-strict: true
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1226332Z   ssh-user: git
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1227145Z   persist-credentials: true
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1227667Z   clean: true
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1228130Z   sparse-checkout-cone-mode: true
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1228666Z   fetch-depth: 1
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1229113Z   fetch-tags: false
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1229574Z   show-progress: true
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1230025Z   lfs: false
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1230445Z   submodules: false
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1230965Z   set-safe-directory: true
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1231480Z   allow-unsafe-pr-checkout: false
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.1232306Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2308114Z Syncing repository: microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2310059Z ##[group]Getting Git version info
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2311251Z Working directory is '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2312656Z [command]/usr/bin/git version
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2345636Z git version 2.55.0
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2365059Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2380489Z Temporarily overriding HOME='/home/runner/work/_temp/f8b37695-349b-484f-91b6-16d0d51d6cc0' before making global git config changes
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2382765Z Adding repository directory to the temporary git global config as a safe directory
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2386958Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2430229Z Deleting the contents of '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2433641Z ##[group]Initializing the repository
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2438221Z [command]/usr/bin/git init /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2520442Z hint: Using 'master' as the name for the initial branch. This default branch name
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2521787Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2522903Z hint: to use in all of your new repositories, which will suppress this warning,
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2524215Z hint: call:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2524633Z hint:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2525148Z hint: 	git config --global init.defaultBranch <name>
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2525780Z hint:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2526361Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2527919Z hint: 'development'. The just-created branch can be renamed via this command:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2528949Z hint:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2529574Z hint: 	git branch -m <name>
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2530138Z hint:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2530774Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2532123Z Initialized empty Git repository in /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester/.git/
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2534863Z [command]/usr/bin/git remote add origin https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2576128Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2577070Z ##[group]Disabling automatic garbage collection
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2579919Z [command]/usr/bin/git config --local gc.auto 0
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2608589Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2609352Z ##[group]Setting up auth
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2615389Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2647218Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.2970524Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.3001827Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.3237510Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.3272834Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.3505754Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.3541582Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.3542580Z ##[group]Fetching the repository
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.3550228Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6:refs/remotes/pull/18/merge
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6853918Z From https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6856229Z  * [new ref]         8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6 -> pull/18/merge
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6861297Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6862993Z ##[group]Determining the checkout info
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6864718Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6867351Z [command]/usr/bin/git sparse-checkout disable
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6929655Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6962452Z ##[group]Checking out the ref
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.6966479Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18/merge
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7044510Z Note: switching to 'refs/remotes/pull/18/merge'.
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7045753Z 
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7046486Z You are in 'detached HEAD' state. You can look around, make experimental
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7048169Z changes and commit them, and you can discard any commits you make in this
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7049290Z state without impacting any branches by switching back to a branch.
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7050302Z 
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7051127Z If you want to create a new branch to retain commits you create, you may
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7052966Z do so (now or later) by using -c with the switch command. Example:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7054126Z 
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7054608Z   git switch -c <new-branch-name>
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7055354Z 
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7055806Z Or undo this operation with:
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7056445Z 
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7057190Z   git switch -
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7057730Z 
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7058687Z Turn off this advice by setting config variable advice.detachedHead to false
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7059990Z 
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7061469Z HEAD is now at 8d8bf29 Merge dafb46ead4d101220af35bee15d933d28f02b302 into 40c9da3d7b37179ddffe049d5301327fa80a8cbd
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7065929Z ##[endgroup]
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7100586Z [command]/usr/bin/git log -1 --format=%H
+Tests (Python 3.13)	Run actions/checkout@v4	2026-09-07T19:35:26.7124491Z 8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	﻿2026-09-07T19:35:26.7491500Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7495643Z ##[group]Run astral-sh/setup-uv@v4
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7496765Z with:
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7497377Z   version: latest
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7502702Z   github-token: ***
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7503410Z   enable-cache: false
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7504101Z   cache-dependency-glob: **/uv.lock
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7504999Z   prune-cache: true
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7505743Z   ignore-nothing-to-cache: false
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.7506726Z ##[endgroup]
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.9017787Z (node:2246) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:26.9019664Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.2810845Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.12.10/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5537014Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/aa6e2da3-3823-46c2-873c-937c5900035f -f /home/runner/work/_temp/8b2f2acc-99b0-4679-86a9-78f7ce657e53
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.9467363Z Added /opt/hostedtoolcache/uv/0.12.10/x86_64 to the path
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.9469006Z Added /home/runner/.local/bin to the path
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.9490504Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+Tests (Python 3.13)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.9491201Z Successfully installed uv version 0.12.10
+Tests (Python 3.13)	Run the standing test command	﻿2026-09-07T19:35:27.9686502Z ##[group]Run uv run --isolated --no-project --python 3.13 --with pytest==9.1.1 python -m pytest tests/ -q --tb=short
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:27.9732718Z shell: /usr/bin/bash -e {0}
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:27.9733062Z env:
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:27.9733345Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:27.9733682Z ##[endgroup]
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:28.1909699Z Downloading cpython-3.13.15-linux-x86_64-gnu (download) (33.2MiB)
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:29.0004864Z  Downloaded cpython-3.13.15-linux-x86_64-gnu (download)
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:29.2035906Z Downloading pygments (1.2MiB)
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:29.2295991Z  Downloaded pygments
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:29.2454135Z Installed 5 packages in 15ms
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:30.1446803Z ..................                                                       [100%]
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:35:30.1717548Z 18 passed in 0.03s
+Tests (Python 3.13)	Post Run astral-sh/setup-uv@v4	﻿2026-09-07T19:35:30.1820336Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.13)	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:30.1821731Z Post job cleanup.
+Tests (Python 3.13)	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:30.2972067Z (node:2292) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Tests (Python 3.13)	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:30.2972912Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Tests (Python 3.13)	Post Run actions/checkout@v4	﻿2026-09-07T19:35:30.3137533Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.3138777Z Post job cleanup.
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.3986414Z [command]/usr/bin/git version
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4055135Z git version 2.55.0
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4090299Z Temporarily overriding HOME='/home/runner/work/_temp/e1d1b135-b0b0-4a40-a282-88f6c028c009' before making global git config changes
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4091517Z Adding repository directory to the temporary git global config as a safe directory
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4095465Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4133404Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4169994Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4410384Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4436373Z http.https://github.com/.extraheader
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4447757Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4479635Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4715783Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Tests (Python 3.13)	Post Run actions/checkout@v4	2026-09-07T19:35:30.4748714Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Tests (Python 3.13)	Complete job	﻿2026-09-07T19:35:30.5118478Z Cleaning up orphan processes
+Tests (Python 3.13)	Complete job	2026-09-07T19:35:30.5391100Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, astral-sh/setup-uv@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Bundle structure (YAML)	Set up job	﻿2026-09-07T19:35:25.4585393Z Current runner version: '2.337.0'
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4632058Z ##[group]Runner Image Provisioner
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4633066Z Hosted Compute Agent
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4633865Z Version: 20260828.587
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4634441Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4635189Z Build Date: 2026-08-28T16:44:25Z
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4635821Z Worker ID: {457eba50-8dfb-46be-b633-cec2bbf0d939}
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4636484Z Azure Region: westus3
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4637023Z ##[endgroup]
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4638398Z ##[group]Operating System
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4639016Z Ubuntu
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4639485Z 24.04.4
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4639961Z LTS
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4640466Z ##[endgroup]
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4640958Z ##[group]Runner Image
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4641546Z Image: ubuntu-24.04
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4642059Z Version: 20260831.293.1
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4643007Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260831.293/images/ubuntu/Ubuntu2404-Readme.md
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4644702Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260831.293
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4645637Z ##[endgroup]
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4646611Z ##[group]GITHUB_TOKEN Permissions
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4648676Z Contents: read
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4649221Z Metadata: read
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4649749Z ##[endgroup]
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4651677Z Secret source: Actions
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4652686Z Prepare workflow directory
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.4962185Z Prepare all required actions
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.5009861Z Getting action download info
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.7992916Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:25.9438229Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+Bundle structure (YAML)	Set up job	2026-09-07T19:35:26.0945733Z Complete job name: Bundle structure (YAML)
+Bundle structure (YAML)	Run actions/checkout@v4	﻿2026-09-07T19:35:26.1761762Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1770146Z ##[group]Run actions/checkout@v4
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1770794Z with:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1771291Z   repository: microsoft/amplifier-bundle-amplifier-tester
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1775153Z   token: ***
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1775543Z   ssh-strict: true
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1775939Z   ssh-user: git
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1776341Z   persist-credentials: true
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1776775Z   clean: true
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1777171Z   sparse-checkout-cone-mode: true
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1777636Z   fetch-depth: 1
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1778037Z   fetch-tags: false
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1778439Z   show-progress: true
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1778843Z   lfs: false
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1779215Z   submodules: false
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1779663Z   set-safe-directory: true
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1780128Z   allow-unsafe-pr-checkout: false
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.1780851Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2731113Z Syncing repository: microsoft/amplifier-bundle-amplifier-tester
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2733295Z ##[group]Getting Git version info
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2734252Z Working directory is '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2735438Z [command]/usr/bin/git version
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2805451Z git version 2.55.0
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2824189Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2836902Z Temporarily overriding HOME='/home/runner/work/_temp/5eabd78b-ee48-4b92-9a92-ad1201a5e06d' before making global git config changes
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2838745Z Adding repository directory to the temporary git global config as a safe directory
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2841868Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2882134Z Deleting the contents of '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2885581Z ##[group]Initializing the repository
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2890192Z [command]/usr/bin/git init /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2981040Z hint: Using 'master' as the name for the initial branch. This default branch name
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2982300Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2983949Z hint: to use in all of your new repositories, which will suppress this warning,
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2985192Z hint: call:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2985865Z hint:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2986688Z hint: 	git config --global init.defaultBranch <name>
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2987632Z hint:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2988572Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2990231Z hint: 'development'. The just-created branch can be renamed via this command:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2991476Z hint:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2992150Z hint: 	git branch -m <name>
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2992905Z hint:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2994058Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2996296Z Initialized empty Git repository in /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester/.git/
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.2999929Z [command]/usr/bin/git remote add origin https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3034123Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3035602Z ##[group]Disabling automatic garbage collection
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3037358Z [command]/usr/bin/git config --local gc.auto 0
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3060255Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3061794Z ##[group]Setting up auth
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3066412Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3089712Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3364458Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3391044Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3556046Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3579662Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3740871Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3765942Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3766726Z ##[group]Fetching the repository
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.3773896Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6:refs/remotes/pull/18/merge
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8889317Z From https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8894370Z  * [new ref]         8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6 -> pull/18/merge
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8896091Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8896757Z ##[group]Determining the checkout info
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8897484Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8907145Z [command]/usr/bin/git sparse-checkout disable
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8943903Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8965482Z ##[group]Checking out the ref
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.8968230Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18/merge
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9026450Z Note: switching to 'refs/remotes/pull/18/merge'.
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9027243Z 
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9027784Z You are in 'detached HEAD' state. You can look around, make experimental
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9028824Z changes and commit them, and you can discard any commits you make in this
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9029628Z state without impacting any branches by switching back to a branch.
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9030088Z 
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9030412Z If you want to create a new branch to retain commits you create, you may
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9031209Z do so (now or later) by using -c with the switch command. Example:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9031644Z 
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9031844Z   git switch -c <new-branch-name>
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9032152Z 
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9032339Z Or undo this operation with:
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9032619Z 
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9032789Z   git switch -
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9033082Z 
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9033906Z Turn off this advice by setting config variable advice.detachedHead to false
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9034423Z 
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9035043Z HEAD is now at 8d8bf29 Merge dafb46ead4d101220af35bee15d933d28f02b302 into 40c9da3d7b37179ddffe049d5301327fa80a8cbd
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9036726Z ##[endgroup]
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9064951Z [command]/usr/bin/git log -1 --format=%H
+Bundle structure (YAML)	Run actions/checkout@v4	2026-09-07T19:35:26.9081964Z 8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6
+Bundle structure (YAML)	Run actions/setup-python@v5	﻿2026-09-07T19:35:26.9323394Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9325871Z ##[group]Run actions/setup-python@v5
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9326354Z with:
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9326720Z   python-version: 3.13
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9327131Z   check-latest: false
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9330407Z   token: ***
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9330800Z   update-environment: true
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9331242Z   allow-prereleases: false
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9331670Z   freethreaded: false
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:26.9332074Z ##[endgroup]
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:27.0595556Z ##[group]Installed versions
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:27.0666780Z (node:2242) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:27.0669656Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:27.0671335Z Successfully set up CPython (3.13.15)
+Bundle structure (YAML)	Run actions/setup-python@v5	2026-09-07T19:35:27.0672913Z ##[endgroup]
+Bundle structure (YAML)	Install PyYAML	﻿2026-09-07T19:35:27.0822807Z ##[group]Run python -m pip install --quiet 'PyYAML>=6.0'
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0938105Z shell: /usr/bin/bash -e {0}
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0938730Z env:
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0939288Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0940231Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.15/x64/lib/pkgconfig
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0941176Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0942045Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0942931Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0944102Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.15/x64/lib
+Bundle structure (YAML)	Install PyYAML	2026-09-07T19:35:27.0944878Z ##[endgroup]
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	﻿2026-09-07T19:35:29.3439628Z ##[group]Run python - <<'PY'
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3494556Z shell: /usr/bin/bash -e {0}
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3494916Z env:
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3495227Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3495701Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.15/x64/lib/pkgconfig
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3496172Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3496600Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3497012Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3497420Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.15/x64/lib
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3497781Z ##[endgroup]
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3950302Z OK  bundle.md  (bundle.name=amplifier-tester)
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3951402Z OK  behaviors/amplifier-tester.yaml  (bundle.name=amplifier-tester-behavior)
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3952314Z OK  .amplifier/digital-twin-universe/profiles/amplifier-tester-self-validation.yaml  (parses)
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3953050Z OK  .amplifier/evaluations/01-setup-with-build-up-foundation/profiles/outer-dtu.yaml  (parses)
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3953752Z 
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3953923Z 4 YAML document(s) parsed.
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:35:29.3954238Z Bundle structure OK.
+Bundle structure (YAML)	Post Run actions/setup-python@v5	﻿2026-09-07T19:35:29.4103396Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Bundle structure (YAML)	Post Run actions/setup-python@v5	2026-09-07T19:35:29.4104623Z Post job cleanup.
+Bundle structure (YAML)	Post Run actions/setup-python@v5	2026-09-07T19:35:29.5234407Z (node:2277) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Bundle structure (YAML)	Post Run actions/setup-python@v5	2026-09-07T19:35:29.5280124Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Bundle structure (YAML)	Post Run actions/checkout@v4	﻿2026-09-07T19:35:29.5448026Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.5449260Z Post job cleanup.
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6238159Z [command]/usr/bin/git version
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6270590Z git version 2.55.0
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6303012Z Temporarily overriding HOME='/home/runner/work/_temp/158b10af-5b0e-468f-9377-2a18ab903071' before making global git config changes
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6304507Z Adding repository directory to the temporary git global config as a safe directory
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6308571Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6339461Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6365482Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6553718Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6578811Z http.https://github.com/.extraheader
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6589521Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6620005Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6802191Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Bundle structure (YAML)	Post Run actions/checkout@v4	2026-09-07T19:35:29.6832512Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Bundle structure (YAML)	Complete job	﻿2026-09-07T19:35:29.7119838Z Cleaning up orphan processes
+Bundle structure (YAML)	Complete job	2026-09-07T19:35:29.7434981Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.11)	Set up job	﻿2026-09-07T19:35:25.4450957Z Current runner version: '2.337.0'
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4474180Z ##[group]Runner Image Provisioner
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4475053Z Hosted Compute Agent
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4475693Z Version: 20260828.587
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4476286Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4477030Z Build Date: 2026-08-28T16:44:25Z
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4477693Z Worker ID: {9e56ca8c-a0c3-4554-96c7-720f056c4aea}
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4478695Z Azure Region: westcentralus
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4479502Z ##[endgroup]
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4480884Z ##[group]Operating System
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4481515Z Ubuntu
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4482072Z 24.04.4
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4482553Z LTS
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4483078Z ##[endgroup]
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4483617Z ##[group]Runner Image
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4484205Z Image: ubuntu-24.04
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4484773Z Version: 20260831.293.1
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4485776Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260831.293/images/ubuntu/Ubuntu2404-Readme.md
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4487474Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260831.293
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4488608Z ##[endgroup]
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4489716Z ##[group]GITHUB_TOKEN Permissions
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4492003Z Contents: read
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4492648Z Metadata: read
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4493187Z ##[endgroup]
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4495116Z Secret source: Actions
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4496405Z Prepare workflow directory
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4796429Z Prepare all required actions
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.4847017Z Getting action download info
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.7955351Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:25.9213647Z Download action repository 'astral-sh/setup-uv@v4' (SHA:38f3f104447c67c051c4a08e39b64a148898af3a)
+Tests (Python 3.11)	Set up job	2026-09-07T19:35:26.7122813Z Complete job name: Tests (Python 3.11)
+Tests (Python 3.11)	Run actions/checkout@v4	﻿2026-09-07T19:35:26.7810909Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7820058Z ##[group]Run actions/checkout@v4
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7820947Z with:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7821613Z   repository: microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7826025Z   token: ***
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7826577Z   ssh-strict: true
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7827175Z   ssh-user: git
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7827781Z   persist-credentials: true
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7828553Z   clean: true
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7829190Z   sparse-checkout-cone-mode: true
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7829845Z   fetch-depth: 1
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7830461Z   fetch-tags: false
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7831069Z   show-progress: true
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7831637Z   lfs: false
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7832238Z   submodules: false
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7832931Z   set-safe-directory: true
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7833644Z   allow-unsafe-pr-checkout: false
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.7834458Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8847671Z Syncing repository: microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8850489Z ##[group]Getting Git version info
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8851751Z Working directory is '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8853368Z [command]/usr/bin/git version
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8914146Z git version 2.55.0
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8931020Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8943471Z Temporarily overriding HOME='/home/runner/work/_temp/751dae55-7bf4-48c6-b0de-8d3e42e040d6' before making global git config changes
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8945094Z Adding repository directory to the temporary git global config as a safe directory
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8949096Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.8998408Z Deleting the contents of '/home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester'
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9001678Z ##[group]Initializing the repository
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9006539Z [command]/usr/bin/git init /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9090390Z hint: Using 'master' as the name for the initial branch. This default branch name
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9091677Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9093245Z hint: to use in all of your new repositories, which will suppress this warning,
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9094733Z hint: call:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9095591Z hint:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9096658Z hint: 	git config --global init.defaultBranch <name>
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9097437Z hint:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9098353Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9099555Z hint: 'development'. The just-created branch can be renamed via this command:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9100937Z hint:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9101728Z hint: 	git branch -m <name>
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9102439Z hint:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9103223Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9104793Z Initialized empty Git repository in /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester/.git/
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9107798Z [command]/usr/bin/git remote add origin https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9142720Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9143644Z ##[group]Disabling automatic garbage collection
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9145726Z [command]/usr/bin/git config --local gc.auto 0
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9170842Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9171833Z ##[group]Setting up auth
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9176147Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9203206Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9504047Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9531220Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9749759Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9778499Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9953773Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9982420Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9983558Z ##[group]Fetching the repository
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:26.9991042Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6:refs/remotes/pull/18/merge
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4860875Z From https://github.com/microsoft/amplifier-bundle-amplifier-tester
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4864159Z  * [new ref]         8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6 -> pull/18/merge
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4870213Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4872912Z ##[group]Determining the checkout info
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4875885Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4877871Z [command]/usr/bin/git sparse-checkout disable
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4918458Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4950125Z ##[group]Checking out the ref
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.4953066Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18/merge
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5015606Z Note: switching to 'refs/remotes/pull/18/merge'.
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5017347Z 
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5018937Z You are in 'detached HEAD' state. You can look around, make experimental
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5022467Z changes and commit them, and you can discard any commits you make in this
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5025544Z state without impacting any branches by switching back to a branch.
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5027594Z 
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5029194Z If you want to create a new branch to retain commits you create, you may
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5033051Z do so (now or later) by using -c with the switch command. Example:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5034966Z 
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5035992Z   git switch -c <new-branch-name>
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5037499Z 
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5038567Z Or undo this operation with:
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5039961Z 
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5040746Z   git switch -
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5041969Z 
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5043605Z Turn off this advice by setting config variable advice.detachedHead to false
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5045994Z 
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5048990Z HEAD is now at 8d8bf29 Merge dafb46ead4d101220af35bee15d933d28f02b302 into 40c9da3d7b37179ddffe049d5301327fa80a8cbd
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5056705Z ##[endgroup]
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5061846Z [command]/usr/bin/git log -1 --format=%H
+Tests (Python 3.11)	Run actions/checkout@v4	2026-09-07T19:35:27.5076249Z 8d8bf29fdf6d2e0adf64620df42a48e99ad3a9e6
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	﻿2026-09-07T19:35:27.5515214Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5521404Z ##[group]Run astral-sh/setup-uv@v4
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5522664Z with:
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5523634Z   version: latest
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5532711Z   github-token: ***
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5533826Z   enable-cache: false
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5534964Z   cache-dependency-glob: **/uv.lock
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5536251Z   prune-cache: true
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5537354Z   ignore-nothing-to-cache: false
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.5538615Z ##[endgroup]
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.7044228Z (node:2242) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:27.7058892Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:28.0390325Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.12.10/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:28.5624735Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/8ec0f84f-e64c-4577-a728-ef625b984b8b -f /home/runner/work/_temp/d3b1eb38-1ecb-4e36-bcbe-8d48972743c2
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:29.1698698Z Added /opt/hostedtoolcache/uv/0.12.10/x86_64 to the path
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:29.1699660Z Added /home/runner/.local/bin to the path
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:29.1724787Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+Tests (Python 3.11)	Run astral-sh/setup-uv@v4	2026-09-07T19:35:29.1725392Z Successfully installed uv version 0.12.10
+Tests (Python 3.11)	Run the standing test command	﻿2026-09-07T19:35:29.1860477Z ##[group]Run uv run --isolated --no-project --python 3.11 --with pytest==9.1.1 python -m pytest tests/ -q --tb=short
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:29.1894281Z shell: /usr/bin/bash -e {0}
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:29.1894662Z env:
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:29.1894991Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:29.1895348Z ##[endgroup]
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:29.4534064Z Downloading cpython-3.11.16-linux-x86_64-gnu (download) (29.4MiB)
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:30.4124543Z  Downloaded cpython-3.11.16-linux-x86_64-gnu (download)
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:30.8497042Z Downloading pygments (1.2MiB)
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:30.9763287Z  Downloaded pygments
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:30.9839878Z Installed 5 packages in 7ms
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:31.7640127Z ..................                                                       [100%]
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:35:31.7879621Z 18 passed in 0.03s
+Tests (Python 3.11)	Post Run astral-sh/setup-uv@v4	﻿2026-09-07T19:35:31.7972637Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.11)	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:31.7973959Z Post job cleanup.
+Tests (Python 3.11)	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:31.9130162Z (node:2289) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Tests (Python 3.11)	Post Run astral-sh/setup-uv@v4	2026-09-07T19:35:31.9131206Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Tests (Python 3.11)	Post Run actions/checkout@v4	﻿2026-09-07T19:35:31.9269200Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:31.9270365Z Post job cleanup.
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0065225Z [command]/usr/bin/git version
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0100042Z git version 2.55.0
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0130283Z Temporarily overriding HOME='/home/runner/work/_temp/926f58ac-ea34-40f8-b4ef-3317bd5efac4' before making global git config changes
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0131429Z Adding repository directory to the temporary git global config as a safe directory
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0135145Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/amplifier-bundle-amplifier-tester/amplifier-bundle-amplifier-tester
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0167224Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0196671Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0381409Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0404587Z http.https://github.com/.extraheader
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0413099Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0439850Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0617244Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Tests (Python 3.11)	Post Run actions/checkout@v4	2026-09-07T19:35:32.0644072Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Tests (Python 3.11)	Complete job	﻿2026-09-07T19:35:32.0943783Z Cleaning up orphan processes
+Tests (Python 3.11)	Complete job	2026-09-07T19:35:32.1152477Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, astral-sh/setup-uv@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

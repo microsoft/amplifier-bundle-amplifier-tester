@@ -1,0 +1,41 @@
+Preflight against CLEAN main @40c9da3, run BEFORE the workflow was written.
+Purpose: prove the gate goes in green rather than arriving red on somebody
+else's code (the "IF CLEAN MAIN IS RED IN CI, STOP AND REPORT" branch).
+
+$ python3 -m pytest tests/ -q
+..................                                                       [100%]
+18 passed in 0.02s
+
+$ uv run --isolated --no-project --python 3.11 --with 'pytest>=8.0' python -m pytest tests/ -q --tb=short
+18 passed in 0.01s
+
+$ uv run --isolated --no-project --python 3.13 --with pytest==9.1.1 python -m pytest tests/ -q --tb=short
+18 passed in 0.02s
+
+$ uvx ruff@0.16.6 check --isolated --select E4,E7,E9,F .
+All checks passed!
+EXIT=0
+
+--- deliberately OUTSIDE the gate, reported not hidden ---
+
+$ uvx ruff@0.16.6 check --isolated .          # FULL default rule set
+Found 6 errors.
+[*] 1 fixable with the `--fix` option (2 hidden fixes can be enabled with the `--unsafe-fixes` option).
+(all style tiers, ISC004 and friends -- none of them breakage)
+
+$ uvx ruff@0.16.6 format --isolated --check .
+2 files would be reformatted, 18 files already formatted
+  - tests/test_lean_head_guardrail.py
+  - .amplifier/evaluations/01-setup-with-build-up-foundation/metrics/extract_metrics.py
+
+--- forbidden-token grep on the committed workflow ---
+
+$ grep -nEi 'continue-on-error|\|\| true|paths:|paths-ignore' .github/workflows/ci.yml
+(no match -- the tokens are absent from the file entirely, including from prose)
+
+--- scratch branch removal, verified by REMOTE read ---
+
+$ git ls-remote --heads origin ci/red-proof-j1e6
+(0 lines)
+$ gh pr view 17 --json number,state,closed,headRefName
+{"closed":true,"headRefName":"ci/red-proof-j1e6","number":17,"state":"CLOSED"}

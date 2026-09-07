@@ -1,0 +1,169 @@
+Lint	Lint (ruff, pinned)	﻿2026-09-07T19:33:13.0533702Z ##[group]Run uvx ruff@0.16.6 check --isolated --select E4,E7,E9,F .
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.0534346Z [36;1muvx ruff@0.16.6 check --isolated --select E4,E7,E9,F .[0m
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.0562515Z shell: /usr/bin/bash -e {0}
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.0562856Z env:
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.0563383Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.0563739Z ##[endgroup]
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.2287171Z Downloading ruff (9.8MiB)
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.2949156Z  Downloaded ruff
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.2974487Z Installed 1 package in 2ms
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3494328Z F821 Undefined name `this_name_is_not_defined_anywhere`
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3495162Z  --> red_proof_lint_defect.py:4:12
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3498880Z   |
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3499438Z 3 | def broken() -> int:
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3500120Z 4 |     return this_name_is_not_defined_anywhere
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3500826Z   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3501263Z 
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3501569Z Found 1 error.
+Lint	Lint (ruff, pinned)	2026-09-07T19:33:13.3529105Z ##[error]Process completed with exit code 1.
+Tests (Python 3.11)	Run the standing test command	﻿2026-09-07T19:33:11.2768497Z ##[group]Run uv run --isolated --no-project --python 3.11 --with pytest==9.1.1 python -m pytest tests/ -q --tb=short
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:11.2769545Z [36;1muv run --isolated --no-project --python 3.11 --with pytest==9.1.1 python -m pytest tests/ -q --tb=short[0m
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:11.2811702Z shell: /usr/bin/bash -e {0}
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:11.2812070Z env:
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:11.2812388Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:11.2812760Z ##[endgroup]
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:11.4703309Z Downloading cpython-3.11.16-linux-x86_64-gnu (download) (29.4MiB)
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:12.3573825Z  Downloaded cpython-3.11.16-linux-x86_64-gnu (download)
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:12.5446966Z Downloading pygments (1.2MiB)
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:12.5741250Z  Downloaded pygments
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:12.5856402Z Installed 5 packages in 10ms
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3829927Z ..................F                                                      [100%]
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3830925Z =================================== FAILURES ===================================
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3831985Z _______________ test_deliberate_failure_to_prove_the_gate_bites ________________
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3833801Z tests/test_red_proof_scratch.py:14: in test_deliberate_failure_to_prove_the_gate_bites
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3834755Z     assert 1 == 2, "deliberate scratch failure: proving the test job can go red"
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3835641Z E   AssertionError: deliberate scratch failure: proving the test job can go red
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3836289Z E   assert 1 == 2
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3836741Z =========================== short test summary info ============================
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3838185Z FAILED tests/test_red_proof_scratch.py::test_deliberate_failure_to_prove_the_gate_bites - AssertionError: deliberate scratch failure: proving the test job can go red
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3839493Z assert 1 == 2
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.3839868Z 1 failed, 18 passed in 0.05s
+Tests (Python 3.11)	Run the standing test command	2026-09-07T19:33:13.4078978Z ##[error]Process completed with exit code 1.
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	﻿2026-09-07T19:33:15.1294111Z ##[group]Run python - <<'PY'
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1294812Z [36;1mpython - <<'PY'[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1295352Z [36;1mimport pathlib[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1295814Z [36;1mimport sys[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1296235Z [36;1m[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1296634Z [36;1mimport yaml[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1297061Z [36;1m[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1297484Z [36;1mroot = pathlib.Path.cwd()[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1297968Z [36;1mfailures: list[str] = [][0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1298407Z [36;1mchecked = 0[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1298790Z [36;1m[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1299170Z [36;1mbundle_md = root / "bundle.md"[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1299921Z [36;1mif not bundle_md.is_file():[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1300423Z [36;1m    failures.append("bundle.md is missing")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1301123Z [36;1melse:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1301597Z [36;1m    text = bundle_md.read_text(encoding="utf-8")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1302142Z [36;1m    if not text.startswith("---\n"):[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1302797Z [36;1m        failures.append("bundle.md: no YAML frontmatter (file does not open with '---')")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1303462Z [36;1m    else:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1303865Z [36;1m        end = text.find("\n---", 3)[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1304330Z [36;1m        if end == -1:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1304897Z [36;1m            failures.append("bundle.md: frontmatter opened but never closed")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1305479Z [36;1m        else:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1305892Z [36;1m            data = None[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1306321Z [36;1m            try:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1306780Z [36;1m                data = yaml.safe_load(text[4 : end + 1])[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1307300Z [36;1m                checked += 1[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1307795Z [36;1m            except yaml.YAMLError as exc:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1308376Z [36;1m                failures.append("bundle.md frontmatter: " + str(exc))[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1308966Z [36;1m            if data is not None:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1309819Z [36;1m                name = data.get("bundle", {}).get("name") if isinstance(data, dict) else None[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1310450Z [36;1m                if not name:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1311021Z [36;1m                    failures.append("bundle.md frontmatter: missing bundle.name")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1311615Z [36;1m                else:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1312131Z [36;1m                    print("OK  bundle.md  (bundle.name=" + str(name) + ")")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1312675Z [36;1m[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1313123Z [36;1mbehaviors = sorted((root / "behaviors").glob("*.yaml"))[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1313647Z [36;1mif not behaviors:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1314064Z [36;1m    failures.append([0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1314697Z [36;1m        "behaviors/*.yaml matched NOTHING -- a structure gate that checks zero files is decoration"[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1315336Z [36;1m    )[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1315722Z [36;1mfor path in behaviors:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1316242Z [36;1m    # .as_posix(), not str(): str() emits OS-native separators.[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1316825Z [36;1m    rel = path.relative_to(root).as_posix()[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1317288Z [36;1m    try:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1317754Z [36;1m        data = yaml.safe_load(path.read_text(encoding="utf-8"))[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1318293Z [36;1m        checked += 1[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1318731Z [36;1m    except yaml.YAMLError as exc:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1319220Z [36;1m        failures.append(rel + ": " + str(exc))[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1319865Z [36;1m        continue[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1320394Z [36;1m    name = data.get("bundle", {}).get("name") if isinstance(data, dict) else None[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1320950Z [36;1m    if not name:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1321406Z [36;1m        failures.append(rel + ": missing bundle.name")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1321871Z [36;1m    else:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1322301Z [36;1m        print("OK  " + rel + "  (bundle.name=" + str(name) + ")")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1322984Z [36;1m[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1323451Z [36;1m# The DTU profiles this bundle ships are YAML too, and a malformed[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1324101Z [36;1m# one fails only when a user launches an environment. Parse them[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1324751Z [36;1m# here; they carry no bundle.name, so only parseability is asserted.[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1325387Z [36;1mprofiles = sorted((root / ".amplifier").rglob("*.yaml"))[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1325911Z [36;1mfor path in profiles:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1326357Z [36;1m    rel = path.relative_to(root).as_posix()[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1326793Z [36;1m    try:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1327218Z [36;1m        yaml.safe_load(path.read_text(encoding="utf-8"))[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1327831Z [36;1m        checked += 1[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1328313Z [36;1m    except yaml.YAMLError as exc:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1328795Z [36;1m        failures.append(rel + ": " + str(exc))[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1329243Z [36;1m        continue[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1329879Z [36;1m    print("OK  " + rel + "  (parses)")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1330312Z [36;1m[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1330638Z [36;1mprint("")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1331074Z [36;1mprint(str(checked) + " YAML document(s) parsed.")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1331562Z [36;1mif failures:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1331919Z [36;1m    print("")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1332298Z [36;1m    print("FAILURES:")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1332706Z [36;1m    for item in failures:[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1333131Z [36;1m        print("  - " + item)[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1333535Z [36;1m    sys.exit(1)[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1333925Z [36;1mprint("Bundle structure OK.")[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1334329Z [36;1mPY[0m
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1372231Z shell: /usr/bin/bash -e {0}
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1372662Z env:
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1373090Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1373718Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.15/x64/lib/pkgconfig
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1374352Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1374927Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1375482Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.15/x64
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1376045Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.15/x64/lib
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1376525Z ##[endgroup]
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1902043Z OK  bundle.md  (bundle.name=amplifier-tester)
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1903268Z OK  .amplifier/digital-twin-universe/profiles/amplifier-tester-self-validation.yaml  (parses)
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1904413Z OK  .amplifier/evaluations/01-setup-with-build-up-foundation/profiles/outer-dtu.yaml  (parses)
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1905032Z 
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1905334Z 3 YAML document(s) parsed.
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1905643Z 
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1905837Z FAILURES:
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1906447Z   - behaviors/amplifier-tester.yaml: while parsing a flow sequence
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1907189Z   in "<unicode string>", line 19, column 9:
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1907773Z       this: [is, not, valid
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1908248Z             ^
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1908719Z expected ',' or ']', but got '<stream end>'
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1909307Z   in "<unicode string>", line 20, column 1:
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1910223Z     
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1953412Z     ^
+Bundle structure (YAML)	Parse bundle.md frontmatter and behaviors/*.yaml	2026-09-07T19:33:15.1965488Z ##[error]Process completed with exit code 1.
+Tests (Python 3.13)	Run the standing test command	﻿2026-09-07T19:33:13.2818221Z ##[group]Run uv run --isolated --no-project --python 3.13 --with pytest==9.1.1 python -m pytest tests/ -q --tb=short
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:13.2819191Z [36;1muv run --isolated --no-project --python 3.13 --with pytest==9.1.1 python -m pytest tests/ -q --tb=short[0m
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:13.2864073Z shell: /usr/bin/bash -e {0}
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:13.2864433Z env:
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:13.2864769Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:13.2865149Z ##[endgroup]
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:13.5418773Z Downloading cpython-3.13.15-linux-x86_64-gnu (download) (33.2MiB)
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:14.5531700Z  Downloaded cpython-3.13.15-linux-x86_64-gnu (download)
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:14.9794884Z Downloading pygments (1.2MiB)
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.0749286Z  Downloaded pygments
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.0847837Z Installed 5 packages in 9ms
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9655319Z ..................F                                                      [100%]
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9656093Z =================================== FAILURES ===================================
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9657419Z _______________ test_deliberate_failure_to_prove_the_gate_bites ________________
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9657975Z tests/test_red_proof_scratch.py:14: in test_deliberate_failure_to_prove_the_gate_bites
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9658542Z     assert 1 == 2, "deliberate scratch failure: proving the test job can go red"
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9659064Z E   AssertionError: deliberate scratch failure: proving the test job can go red
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9659463Z E   assert 1 == 2
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9660019Z =========================== short test summary info ============================
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9660998Z FAILED tests/test_red_proof_scratch.py::test_deliberate_failure_to_prove_the_gate_bites - AssertionError: deliberate scratch failure: proving the test job can go red
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9661690Z assert 1 == 2
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9923473Z 1 failed, 18 passed in 0.04s
+Tests (Python 3.13)	Run the standing test command	2026-09-07T19:33:15.9935637Z ##[error]Process completed with exit code 1.
