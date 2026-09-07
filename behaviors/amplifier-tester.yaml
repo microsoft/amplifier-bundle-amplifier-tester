@@ -1,3 +1,4 @@
+# SCRATCH ONLY -- deliberate YAML syntax error to prove the structure job bites
 bundle:
   name: amplifier-tester-behavior
   version: 0.1.0
@@ -14,3 +15,5 @@ agents:
 context:
   include:
     - amplifier-tester:context/amplifier-tester-awareness.md
+
+  this: [is, not, valid
