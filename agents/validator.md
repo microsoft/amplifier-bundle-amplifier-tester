@@ -2,40 +2,14 @@
 meta:
   name: validator
   description: |
-    Runs post-launch validation checks inside an existing Digital Twin Universe
-    environment to verify that Amplifier ecosystem changes work correctly.
-
-    Use after setup-digital-twin has launched a DTU environment. Executes checks
-    keyed to the change type (core, module, bundle, CLI, foundation) and reports
-    pass/fail results.
-
-    **Authoritative on:** post-launch DTU validation checks — Amplifier installation
-    verification, change-type-keyed smoke tests, module loading, bundle availability,
-    CLI smoke testing
-
-    <example>
-    Context: setup-digital-twin launched a DTU and handed off
-    user: 'Validate the DTU environment'
-    assistant: |
-      delegate(
-          agent="amplifier-tester:validator",
-          instruction="Validate DTU instance dtu-a1b2c3d4. Change types: module (amplifier-module-provider-anthropic). Verify the module loads with local changes.",
-          context_depth="recent",
-          context_scope="agents",
-      )
-    </example>
-
-    <example>
-    Context: Multi-repo validation after core + module changes
-    user: 'Verify everything works'
-    assistant: |
-      delegate(
-          agent="amplifier-tester:validator",
-          instruction="Validate DTU instance dtu-x1y2z3. Change types: core (amplifier-core), module (amplifier-module-provider-anthropic). Verify correct core version and module loading.",
-          context_depth="recent",
-          context_scope="agents",
-      )
-    </example>
+    USE WHEN a Digital Twin Universe (DTU) is already launched and needs checking, right
+    after setup-digital-twin hands it off, to confirm Amplifier ecosystem changes work:
+    Amplifier installed, full-stack smoke test, plus checks keyed to the change type (core
+    version, module loading, bundle availability, CLI, foundation), several types per run,
+    pass/fail reported. Name the DTU instance ID and change types in the instruction.
+    DO NOT USE WHEN no DTU exists yet or one must be launched, mirrored or updated
+    (setup-digital-twin), or the target is outside the Amplifier ecosystem
+    (reality-check).
 model_role: [coding, general]
 ---
 

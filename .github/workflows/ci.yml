@@ -98,8 +98,14 @@ jobs:
   # `--no-project` / `--isolated`: this repo ships no pyproject.toml and no
   # uv.lock, so there is nothing for uv to sync. The suite is pure-Python and
   # dependency-light by design (its docstring says so: no network, no API key,
-  # no bundle load) -- pytest is the only requirement, and it is PINNED, since
-  # it defines the gate.
+  # no bundle load). Two requirements, both PINNED, since they define the gate:
+  # pytest, and PyYAML -- which tests/test_agent_description_policy.py needs to
+  # read each agent's frontmatter. The alternative was regexing a YAML block
+  # scalar by hand in the guard, which would make the guard wrong in a way
+  # nothing else in the repo would catch. The `bundle-structure` job below
+  # already installs PyYAML for the same reason; this pins the version rather
+  # than tracking that job's floor spec, because a test dependency that can
+  # move under the gate is not pinned.
   #
   # The suite uses `from __future__ import annotations` with PEP 585/604
   # syntax; 3.11 is the floor the Amplifier family targets and 3.13 is a
@@ -129,6 +135,7 @@ jobs:
           uv run --isolated --no-project
           --python ${{ matrix.python-version }}
           --with pytest==9.1.1
+          --with PyYAML==6.0.2
           python -m pytest tests/ -q --tb=short
 
   # ────────────────────────────────────────────────────────────────────────
