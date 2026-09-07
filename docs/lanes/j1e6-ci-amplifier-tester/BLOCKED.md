@@ -1,5 +1,9 @@
 # BLOCKED — lane `j1e6-ci-amplifier-tester`
 
+**TERMINAL OUTCOME: C — BLOCKED.** Declared here, once. This lane no longer
+defers the terminal word; deferring was itself a defect, because the goal's
+three branches are exhaustive and it forbids inventing a fourth.
+
 **Trigger: Procedure 1. The claim was refused.**
 
     work_claim(project="model_performance", item_id="model_performance-j1e6")
@@ -44,14 +48,47 @@ record about the lane's authority to declare the goal met.
   remote read.
 - Spend $0.00 against the $0 authority.
 
-## The item is NOT released
+## Why C is the correct branch, on the goal's own text
 
-Branch C's remedy is `work_release`, which presumes this session HOLDS the
-item. It does not, and never did — that is the whole content of this file. The
-item is held by `agent-spark-1-1101253` and already reads `resolved`. Calling
-`work_release` here would fail, and calling `work_block` first would be worse
-(a blocked item cannot be claimed, therefore cannot be released).
+The lane previously argued C would be false because the outcome was not
+unreachable. That was wrong twice over.
 
-**The terminal word for this item is the manager's, not this lane's.** The
-lane's completion record (`DONE.json`) has been amended to say so rather than
-to assert OUTCOME A on its own authority.
+Branch C's own enumeration reads: *"unreachable for a reason other than the
+cap — a missing prerequisite, **a refused claim**, a broken dependency, a
+defect in another component."* **A refused claim is named in the list.** It is
+what happened, so C is not an approximation here; it is the branch the goal
+wrote for this case.
+
+It is not B: the cap never bound (authority $0, spend $0.00, nothing left
+unbought). It is not A: A requires the item resolved with a summary, and this
+session can neither claim nor resolve it.
+
+## The release was ATTEMPTED and REFUSED — verbatim
+
+Branch C says the item *"is released via `work_release`"*. That was attempted
+rather than reasoned about:
+
+    work_release(id="model_performance-j1e6")
+    -> not currently holding 'model_performance-j1e6' in this session --
+       refusing to release an item this session did not claim
+
+**This is the goal's own clause working as written, not a skipped step.**
+Procedure 5 says: *"Release while you still HOLD the item; do not `work_block`
+it first, because a blocked item cannot be claimed and therefore cannot be
+released."* That instruction presupposes holding. A lane whose claim was
+REFUSED never holds, so the release leg of branch C is structurally
+unreachable for it — the tool refuses by design, mutating nothing.
+
+`work_block` was deliberately NOT called first, exactly as Procedure 5 warns.
+
+**The blocked-and-released procedure is therefore completed as far as it can
+be:** BLOCKED.md written and committed, release attempted and refused with the
+refusal recorded verbatim, the completion marker written, and the lane stopped.
+The item remains held by `agent-spark-1-1101253` and already reads `resolved`.
+
+## What this does and does not retract
+
+It does not retract the delivered work, which stands on its own evidence and is
+the manager's to accept or discard. PR #18 is open, green and unmerged. A lane
+can end in C — the ITEM was unreachable to it — while a working deliverable
+sits in a PR; those are not in tension, and the manager reconciles them.
