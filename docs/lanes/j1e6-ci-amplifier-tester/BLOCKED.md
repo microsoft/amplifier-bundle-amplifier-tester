@@ -1,8 +1,10 @@
 # BLOCKED — lane `j1e6-ci-amplifier-tester`
 
-**TERMINAL OUTCOME: C — BLOCKED.** Declared here, once. This lane no longer
-defers the terminal word; deferring was itself a defect, because the goal's
-three branches are exhaustive and it forbids inventing a fourth.
+**TERMINAL OUTCOME: C — BLOCKED, with branch C's release leg UNFULFILLED.**
+Declared once. This lane no longer defers the terminal word; deferring was
+itself a defect, because the goal's three branches are exhaustive and it
+forbids inventing a fourth. But C is not fully satisfied either: see
+"THE PROCEDURE IS NOT COMPLETED" below. The gap is stated, not papered over.
 
 **Trigger: Procedure 1. The claim was refused.**
 
@@ -81,10 +83,55 @@ unreachable for it — the tool refuses by design, mutating nothing.
 
 `work_block` was deliberately NOT called first, exactly as Procedure 5 warns.
 
-**The blocked-and-released procedure is therefore completed as far as it can
-be:** BLOCKED.md written and committed, release attempted and refused with the
-refusal recorded verbatim, the completion marker written, and the lane stopped.
-The item remains held by `agent-spark-1-1101253` and already reads `resolved`.
+### THE PROCEDURE IS NOT COMPLETED
+
+Stated flatly, because the earlier wording here — *"completed as far as it can
+be"* — was a hedge that made an unfinished record look finished. Branch C
+requires BLOCKED.md committed **AND** the item released. The release did not
+happen. **One required step is unmet, and this lane cannot meet it.**
+
+Done: BLOCKED.md written and committed; completion marker written; lane stopped.
+**Not done: the item is not released.**
+
+### Re-tested, not asserted — fresh receipts
+
+The claim was attempted a SECOND time before writing this, because this lane
+had already reasoned its way to two wrong conclusions about the goal's text and
+had no business asserting impossibility a third time without measuring it:
+
+    work_claim(project="model_performance", item_id="model_performance-j1e6")
+    -> claim model_performance-j1e6 as 'agent-spark-1-2996136' failed:
+       Error claiming model_performance-j1e6: issue already claimed by
+       agent-spark-1-1101253
+
+    work_release(id="model_performance-j1e6")
+    -> not currently holding 'model_performance-j1e6' in this session --
+       refusing to release an item this session did not claim
+
+Both legs refused, mutating nothing. Claiming is the only route to holding, and
+holding is the only route to releasing, so the release is unreachable from here.
+
+### What the queue actually shows — and a finding the manager needs
+
+`work_list(project="model_performance", status="held")` returns **two** items:
+`model_performance-2un7` (agent-spark-1-2821962) and `model_performance-ytja`
+(agent-spark-1-3132588). **`model_performance-j1e6` is NOT among them.**
+`work_stats` agrees: `held: 2`, `held_stale: 0`.
+
+So the item is **not in live custody at all** — its status is `resolved`, while
+its `holder` field still names `agent-spark-1-1101253`. `work_claim` is
+refusing on that **stale holder attribute of a closed item**.
+
+Two consequences, both worth the manager's attention:
+
+1. **There is no stuck custody to free.** No agent is blocked behind this item
+   and no reap sweep will act on it — `held_stale: 0`. The unmet release step
+   is a bookkeeping gap, not a resource leak.
+2. **`work_release` would be the wrong instrument even if it worked.** Release
+   returns an item to open/ready; on a *resolved* item that is a reopen in
+   disguise — it would clear the closed state and move every throughput
+   roll-up. That is `work_reopen`'s documented cost and explicitly the
+   manager's call, not a lane's. This lane did not do it by another name.
 
 ## What this does and does not retract
 
