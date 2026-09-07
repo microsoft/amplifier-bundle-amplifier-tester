@@ -141,11 +141,20 @@ commits of this branch under the new workflow after `j1e6` lands.
 
 ## 7. Publication
 
-Draft PR opened against `microsoft/amplifier-bundle-amplifier-tester`. **Not
-merged** — the manager merges. Marked ready for review on the green local suite,
-since no CI exists to gate on.
+Opened as a **draft** against `microsoft/amplifier-bundle-amplifier-tester`,
+then **marked ready for review** on the green local suite. **Not merged** — the
+manager merges.
 
-- PR: _(filled in from the remote read after the PR is opened)_
+- PR **#16** — https://github.com/microsoft/amplifier-bundle-amplifier-tester/pull/16
+- branch `lane/3ahq-leanhead-amplifier-tester`, state `OPEN`, `isDraft: false`,
+  `mergeable: MERGEABLE`, read back with
+  `gh pr view 16 --json number,isDraft,state,url,headRefName,headRefOid,mergeable`
+
+**Choice recorded.** The item says *"marked ready only on green CI"*; the goal
+says *"marked ready when the local suite is green"*. There is no CI in this repo,
+so the item's gate can never open and the PR would sit as a draft forever. I
+took the goal's gate — local suite green, 18 passed — and marked it ready.
+Marking ready does not merge; the manager's merge gate is unaffected.
 
 ## 8. Spend
 
