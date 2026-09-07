@@ -1,0 +1,89 @@
+F..F..............                                                       [100%]
+=================================== FAILURES ===================================
+____ TestBytePinAgainstTheV1Head.test_shipped_file_is_byte_identical_to_v1 _____
+
+self = <test_lean_head_guardrail.TestBytePinAgainstTheV1Head object at 0xf9909cecbe90>
+
+    def test_shipped_file_is_byte_identical_to_v1(self) -> None:
+        want = _pinned_lean()
+        got = _shipped()
+>       assert got == want, (
+            f"{TARGET} has drifted from the V1 lean head ({len(got)} chars vs "
+            f"the pinned {len(want)}). The -13.57% cost reduction was measured "
+            "against these exact bytes.\n"
+            f"--- pinned v1 ---\n{want}\n--- shipped now ---\n{got}"
+        )
+E       AssertionError: context/amplifier-tester-awareness.md has drifted from the V1 lean head (2068 chars vs the pinned 1242). The -13.57% cost reduction was measured against these exact bytes.
+E         --- pinned v1 ---
+E         # Amplifier Tester
+E         Tests changes to Amplifier repos (core, modules, bundles, foundation, app-cli) in isolated DTUs: local ecosystem changes, bundle/module/prompt changes before pushing to GitHub, multi-repo changes verified together. Do NOT use it for apps or anything outside the Amplifier ecosystem — use `amplifier-bundle-reality-check`; if not installed, tell the user to get that bundle; use this one only if they insist.
+E         Setup: `delegate(agent="amplifier-tester:setup-digital-twin", instruction="<what the user needs>", context_depth="recent", context_scope="conversation")`. Checks in an existing DTU: `delegate(agent="amplifier-tester:validator", instruction="<DTU instance ID and what to check>", context_depth="recent", context_scope="agents")`.
+E         Resource accounting is yours: every `setup-digital-twin` launches another DTU (may create/reuse Gitea), nothing is torn down automatically, and the sub-agent is stateless — blind to siblings and live environments. Track DTUs launched across all delegations, enforce a hard cap on concurrent environments, and pass the current live count plus remaining budget in every `setup-digital-twin` instruction; without it, N delegations silently launch N environments and can exhaust host disk.
+E         
+E         --- shipped now ---
+E         # Amplifier Tester
+E         
+E         You have access to the Amplifier amplifier tester bundle for testing changes to Amplifier repos (core, modules, bundles, foundation, app-cli) in isolated Digital Twin Universe environments.
+E         
+E         ## When to Use
+E         
+E         - Developer has local changes to Amplifier ecosystem repos and wants to validate them
+E         - Developer wants to test bundle, module, or prompt changes before pushing to GitHub
+E         - Developer needs to verify multi-repo changes work together in isolation
+E         - Do NOT use this to validate apps or things outside the Amplifier ecosystem. You should use `amplifier-bundle-reality-check` for that instead. If it is not installed, tell the user to get that bundle. Only use this bundle if they insist.
+E         
+E         ## How to Use
+E         
+E         Set up a DTU environment for validating Amplifier ecosystem changes:
+E         ```
+E         delegate(agent="amplifier-tester:setup-digital-twin", instruction="<what the user needs>", context_depth="recent", context_scope="conversation")
+E         ```
+E         
+E         For additional targeted validation checks inside an existing DTU:
+E         ```
+E         delegate(agent="amplifier-tester:validator", instruction="<DTU instance ID and what to check>", context_depth="recent", context_scope="agents")
+E         ```
+E         
+E         ## ⚠️ Resource Accounting (orchestrator responsibility)
+E         
+E         Repeated `setup-digital-twin` delegations **accumulate** environments. Each invocation launches its own DTU (and may create or reuse a Gitea instance); nothing tears them down automatically. The sub-agent is **stateless** — it cannot see how many siblings you have already spawned or how many environments are already live.
+E         
+E         The **orchestrator owns the cumulative ledger and the cap** — the sub-agent cannot, so you must:
+E         
+E         - Track how many DTU environments you have launched across all delegations.
+E         - Set and enforce a hard cap on concurrent environments.
+E         - Pass the **current live count and the remaining budget** in every `setup-digital-twin` delegation instruction, so the sub-agent can confirm scope before adding another.
+E         
+E         Delegating N times without passing a running total will silently launch N environments and can exhaust host disk.
+E         
+E       assert '# Amplifier ... host disk.\n' == '# Amplifier ... host disk.\n'
+E         
+E           # Amplifier Tester
+E         - Tests changes to Amplifier repos (core, modules, bundles, foundation, app-cli) in isolated DTUs: local ecosystem changes, bundle/module/prompt changes before pushing to GitHub, multi-repo changes verified together. Do NOT use it for apps or anything outside the Amplifier ecosystem — use `amplifier-bundle-reality-check`; if not installed, tell the user to get that bundle; use this one only if they insist.
+E         - Setup: `delegate(agent="amplifier-tester:setup-digital-twin", instruction="<what the user needs>", context_depth="recent", context_scope="convers...
+E         
+E         ...Full output truncated (35 lines hidden), use '-vv' to show
+
+tests/test_lean_head_guardrail.py:219: AssertionError
+________________ TestCharBudget.test_shipped_file_within_budget ________________
+
+self = <test_lean_head_guardrail.TestCharBudget object at 0xf9909c63c380>
+
+    def test_shipped_file_within_budget(self) -> None:
+        actual = len(_shipped())
+>       assert actual <= LEAN_BUDGET_CHARS, (
+            f"{TARGET} is {actual} chars, over its pinned lean budget of "
+            f"{LEAN_BUDGET_CHARS} (+{actual - LEAN_BUDGET_CHARS}). This text is "
+            "in the head of every session that loads the bundle, used or not. "
+            "If the growth is a RULE that must be there, raise the budget in "
+            "the same commit, add it to REQUIRED_RULES, and say why in the "
+            "message — never silently."
+        )
+E       AssertionError: context/amplifier-tester-awareness.md is 2068 chars, over its pinned lean budget of 1242 (+826). This text is in the head of every session that loads the bundle, used or not. If the growth is a RULE that must be there, raise the budget in the same commit, add it to REQUIRED_RULES, and say why in the message — never silently.
+E       assert 2068 <= 1242
+
+tests/test_lean_head_guardrail.py:239: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_lean_head_guardrail.py::TestBytePinAgainstTheV1Head::test_shipped_file_is_byte_identical_to_v1
+FAILED tests/test_lean_head_guardrail.py::TestCharBudget::test_shipped_file_within_budget
+2 failed, 16 passed in 0.04s
