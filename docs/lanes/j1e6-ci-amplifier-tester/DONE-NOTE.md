@@ -33,8 +33,9 @@ successful check-run — *configured is not installed*.
 
 ## 1. The workflow
 
-`.github/workflows/ci.yml`, single commit **`dafb46e`** — workflow-only, adds no
-other file to the repo. Three job definitions → **four checks** on `push: main`
+`.github/workflows/ci.yml`, workflow commit **`dafb46e`** — workflow-only, adds
+no other file to the repo — plus **`7beed61`**, a **comment-only** amendment (no
+job, step, trigger or command change; see the `enable-cache` bullet below). Three job definitions → **four checks** on `push: main`
 and `pull_request: main`:
 
 | Check | Command |
@@ -60,12 +61,18 @@ Choices, and why:
   standing command, and CI runs exactly it.
 - **`--no-project` / `--isolated`** — no `pyproject.toml`, no `uv.lock`, nothing
   for uv to sync.
-- **No `enable-cache:` on `setup-uv`.** It keys its cache on `**/uv.lock`; this
-  repo commits no lockfile, so it hard-fails setup before ruff or pytest runs — a
-  red that proves nothing. A sibling lane observed exactly that. (Note the near
-  miss: `enable-caching:` is not a valid input at all and is silently ignored, so
-  "correcting" one into the other in a lockfile-less repo *introduces* the
-  failure. Neither form is used here.)
+- **No `enable-cache:` on `setup-uv`** — and the reason is a **disputed
+  measurement**, recorded as one rather than asserted as fact (commit `7beed61`
+  fixes exactly that overreach in the original comment). `enable-cache: true`
+  keys a cache on `**/uv.lock`; this repo commits no lockfile. One sibling lane
+  (`wayfinder`) observed that hard-fail setup before ruff or pytest ran — a red
+  that proves nothing. Another (`ios-tester`) measured the same input as harmless
+  on a newer `setup-uv`. **Neither measured it here.** Omitting the input is
+  correct under either reading, and these jobs install a handful of small wheels,
+  so the disagreement did not need resolving to ship. (Separately:
+  `enable-caching:` is not a valid input at all and is silently ignored, so
+  "correcting" that spelling into `enable-cache:` in a lockfile-less repo
+  converts a no-op into the disputed failure mode. Neither form is used here.)
 - **No LLM-backed validation.** `.amplifier/evaluations/` launches a Digital Twin
   Universe and spends real money per run; it is deliberately not wired into a
   push gate. CI minutes only, `permissions: contents: read`, no secrets.
@@ -124,7 +131,11 @@ a lint error, which is the whole point of the gate: a red from a broken runner
 proves nothing about the workflow.
 
 **GREEN:** <https://github.com/microsoft/amplifier-bundle-amplifier-tester/actions/runs/34156147826>
-— all four checks pass on the workflow-only commit `dafb46e`:
+— all four checks pass on the workflow-only commit `dafb46e`. The two later
+commits are green too: `21b9285` (lane artifacts only)
+<https://github.com/microsoft/amplifier-bundle-amplifier-tester/actions/runs/34156334504>
+and `7beed61` (comment-only)
+<https://github.com/microsoft/amplifier-bundle-amplifier-tester/actions/runs/34156499023>.
 
 ```
 Lint                     All checks passed!
@@ -188,8 +199,13 @@ other lane is instructed to declare itself BLOCKED over a claim refusal that is
 the **designed steady state**. Obeyed literally by all 19 CI lanes, the owner
 directive would have produced 19 `BLOCKED.md` files and no CI.
 
-What this lane did instead, matching the sibling `j1e6-ci-browser-tester` lane's
-recorded precedent: read the authoritative spec with `work_list(item_id=...)` —
+**Four lanes have now filed this independently** — `browser-tester`, `notify`,
+`tool-filesystem`, `ios-tester` — with two of them filing self-corrections purely
+to fix their own undercount of how many lanes had hit it. This lane is the fifth.
+Four-of-four (now five-of-five) is a systematic defect in the per-lane template
+for multi-lane items, not a coincidence.
+
+What this lane did instead, matching the sibling lanes' recorded precedent: read the authoritative spec with `work_list(item_id=...)` —
 which returns the full description and acceptance criteria **without claiming** —
 completed every deliverable, and reported the defect. `work_claim` was attempted
 first and refused (*"already claimed by agent-spark-1-1101253"*); the item's
@@ -218,10 +234,14 @@ incomplete, the work stands*.
 
 ### F3 — transferable to the remaining CI lanes
 
-1. **`setup-uv` caching in a lockfile-less repo**: `enable-cache: true` hard-fails
-   (*"No file matched to [**/uv.lock]"*); `enable-caching:` is not a valid input
-   and is silently ignored. In a repo with no `uv.lock`, use **neither**. A lane
-   that "fixes" the typo introduces a setup failure that reads as a real red.
+1. **`setup-uv` caching in a lockfile-less repo — and a live disagreement about
+   it.** `wayfinder` observed `enable-cache: true` hard-fail (*"No file matched to
+   [**/uv.lock]"*); `ios-tester` measured it harmless on a newer `setup-uv`. This
+   lane measured **neither** — it omitted the input, which is correct under both
+   readings, and says so in the file rather than repeating an inherited claim as
+   fact. What is *not* in dispute: `enable-caching:` is not a valid input and is
+   silently ignored, so a lane that "fixes" that spelling in a lockfile-less repo
+   converts a no-op into the contested failure mode.
 2. **Word the workflow's comments to avoid the forbidden tokens themselves.**
    Saying *"no `continue-on-error`"* in a comment puts `continue-on-error` in the
    file, and the reviewer's grep cannot tell prose from configuration. Phrase it
