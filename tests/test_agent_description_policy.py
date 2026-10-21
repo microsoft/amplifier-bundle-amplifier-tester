@@ -108,6 +108,21 @@ def test_the_sweep_is_not_vacuous() -> None:
     )
 
 
+def test_execution_handoff_and_isolation_are_in_specialist_bodies() -> None:
+    setup = _norm((AGENTS_DIR / "setup-digital-twin.md").read_text(encoding="utf-8"))
+    validator = _norm((AGENTS_DIR / "validator.md").read_text(encoding="utf-8"))
+    assert "Retain the selected interface through validation" in setup
+    assert "resource budget, and cleanup owner" in setup
+    assert "rather than translating commands or installing a second backend" in setup
+    assert "Before any tests, provider warm-up, or readiness smoke" in setup
+    assert "before those checks in both provision and update commands" in setup
+    assert "another backend requires established profile, execution, and lifecycle compatibility" in validator
+    assert "inspect the home and mounts from inside the environment" in validator
+    assert "Real-data audits require an explicitly authorized source and separate invocation" in validator
+    for path in _agent_files():
+        assert "configured access policy" not in _description(path)
+
+
 @pytest.mark.parametrize("path", _agent_files(), ids=_ids())
 def test_description_is_within_budget(path: Path) -> None:
     description = _description(path)

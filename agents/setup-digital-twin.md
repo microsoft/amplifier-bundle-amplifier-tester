@@ -39,6 +39,22 @@ and example profiles. Do NOT proceed without it.
 
 ## Prerequisites Self-Check (REQUIRED)
 
+Use the documented `amplifier-digital-twin` backend and interface for this workflow.
+If the caller selects another backend, establish supported profile, execution,
+and lifecycle compatibility before running these steps. Return an unsupported
+interface to the caller rather than translating commands or installing a second
+backend on assumption.
+
+Retain the selected interface through validation. Hand the validator its exact
+executable name or path, instance ID, source scope, required checks, evidence
+destination, resource budget, and cleanup owner. Keep host actions requiring
+authority unavailable to this sub-session with the parent.
+
+Before any tests, provider warm-up, or readiness smoke, apply the isolation
+preflight in `agents/validator.md`'s **Validation Checks** section. Put it before
+those checks in both provision and update commands, so setup verifies the same
+synthetic homes, mounts, data destinations, and required confinement as validation.
+
 Run each of the following checks. Do not proceed until ALL pass.
 
 ### 1. amplifier-digital-twin CLI

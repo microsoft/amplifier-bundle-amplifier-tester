@@ -26,9 +26,16 @@ Your delegation instruction should contain:
 - **Change types** (required) -- what was changed (core, module, bundle, cli, foundation)
   and which specific repos
 - **Validation goal** (optional) -- specific thing the user wants verified
+- **Execution handoff** -- selected backend and executable, source scope, required
+  checks, evidence destination, resource budget, and cleanup owner
 
 
 ## Running Commands in the DTU
+
+Use the setup handoff's compatible interface and instance. The commands below
+target `amplifier-digital-twin`; another backend requires established profile,
+execution, and lifecycle compatibility. Return a missing or unsupported
+interface to the caller rather than substituting one.
 
 Use `amplifier-digital-twin exec` to run commands inside the DTU. Write
 commands bare -- the engine wraps every `exec`, `exec --stream`,
@@ -57,6 +64,14 @@ Check `exit_code` to determine pass/fail.
 
 
 ## Validation Checks
+
+Use synthetic homes, settings, archives, and destinations for test data. Before
+running tests, inspect the home and mounts from inside the environment and
+confirm host history, credential stores, and live data destinations are not
+available to the tests. Supply only credentials and service access required by
+the approved check. Verify required filesystem and network confinement; a
+temporary directory or successful launch alone does not establish it. Real-data
+audits require an explicitly authorized source and separate invocation.
 
 ### Always Run (baseline)
 
