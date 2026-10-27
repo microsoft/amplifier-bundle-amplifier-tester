@@ -59,24 +59,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # No `enable-cache:`, deliberately, and the reason is a DISPUTED
-      # measurement rather than a settled fact -- so it is recorded as one.
-      # `enable-cache: true` activates a cache keyed on **/uv.lock, and this
-      # repo commits no lockfile anywhere. One sibling lane (wayfinder)
-      # observed that hard-fail the step with "No file matched to
-      # [**/uv.lock]" before ruff or pytest ever ran -- a red run that proves
-      # nothing. Another (ios-tester) measured it as harmless on a newer
-      # setup-uv. Neither was measured on THIS repo. These jobs install a
-      # handful of small wheels, so the cache is not worth resolving that
-      # disagreement here; omitting it is correct under either reading.
-      #
-      # Separately: `enable-caching:` is not a valid input at all and is
-      # silently ignored. Do not "fix" that spelling into `enable-cache:` in
-      # a lockfile-less repo -- that turns a no-op into the failure mode
-      # above.
-      - uses: astral-sh/setup-uv@v4
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
 
       - name: Lint (ruff, pinned)
         run: uvx ruff@0.16.6 check --isolated --select E4,E7,E9,F .
@@ -124,11 +109,9 @@ jobs:
       matrix:
         python-version: ["3.11", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # No `enable-cache:` -- see the lint job for why (a disputed sibling
-      # measurement, not a settled fact; omitting it is correct either way).
-      - uses: astral-sh/setup-uv@v4
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
 
       - name: Run the standing test command
         run: >
@@ -156,9 +139,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"
 
