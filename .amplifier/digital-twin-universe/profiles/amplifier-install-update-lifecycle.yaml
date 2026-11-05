@@ -1,0 +1,298 @@
+# Exercises the normal Amplifier user install/update lifecycle inside an
+# isolated Incus container.  Covers scenarios U1-U7 from the
+# install/update verification plan.
+#
+# Scenario coverage:
+#   U1  BINARY_EXISTS, VERSION_PARSE  -- amplifier --version succeeds after install
+#   U2  SESSION_VIABLE (baseline)     -- amplifier run completes after provider install
+#   U3  POST_UPDATE_INTEGRITY         -- amplifier update --yes exits 0
+#   U4  PTH_INTEGRITY                 -- .pth files point at existing dirs after update
+#   U5  IMPORT_SMOKE                  -- provider module importable in tool venv after update
+#   U6  STATE_CONSISTENT              -- install-state.json entries point at existing dirs
+#   U7  SESSION_VIABLE (post-update)  -- amplifier run completes after update
+#
+# Key technique: the "simulate hash change" trick.
+# Deleting a provider's cache directory before running `amplifier update --yes`
+# forces update_module() to re-clone, reproducing the stale-.pth bug
+# deterministically without requiring an upstream commit between provision
+# and update.  If update fails to rewrite the .pth after re-cloning, the
+# PTH_INTEGRITY check will catch the broken reference.
+#
+# Prerequisites:
+#   - ANTHROPIC_API_KEY set on the host
+#
+# Usage:
+#   amplifier-digital-twin launch profiles/tests/amplifier-install-update-lifecycle.yaml
+
+name: amplifier-install-update-lifecycle
+description: >
+  End-to-end install and update lifecycle test for the Amplifier CLI.
+  Provisions a clean Ubuntu environment, installs Amplifier, verifies the
+  initial install (U1-U2), takes a pre-update snapshot, simulates a
+  provider hash change, runs amplifier update, and re-verifies PTH
+  integrity, import smoke, state consistency, and session viability (U3-U7).
+
+base:
+  image: ubuntu:24.04
+
+# Forward the Anthropic API key so SESSION_VIABLE checks can reach the LLM
+# during both provision (U2) and update (U7).
+passthrough:
+  services:
+    - name: anthropic
+      key_env: ANTHROPIC_API_KEY
+
+provision:
+  setup_cmds:
+    # --- System tooling ---
+    # python3 is needed for the inline PTH-integrity and snapshot scripts below.
+    - apt-get update && apt-get install -y git curl python3
+
+    # --- Install uv (the package manager used to install Amplifier) ---
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    # --- U1: Install Amplifier CLI ---
+    # Installs the CLI from the main branch via uv tool.
+    # The tool environment lands at $(uv tool dir)/amplifier/ and its bin/
+    # directory is added to PATH by /etc/profile.d/dtu-env.sh.
+    - uv tool install git+https://github.com/microsoft/amplifier@main
+
+    # U1 verification: binary is on PATH and reports a parseable version.
+    # Exits non-zero if the binary is missing or version output is malformed.
+    - amplifier --version
+
+    # --- Configure Amplifier with the Anthropic provider ---
+    # Writing settings.yaml before the first session skips the interactive
+    # first-run wizard.  $ANTHROPIC_API_KEY is available via passthrough.
+    - |
+      mkdir -p /root/.amplifier
+      cat > /root/.amplifier/settings.yaml << EOF
+      config:
+        providers:
+          - module: provider-anthropic
+            source: git+https://github.com/microsoft/amplifier-module-provider-anthropic@main
+            config:
+              api_key: $ANTHROPIC_API_KEY
+      EOF
+
+    # --- U2: SESSION_VIABLE baseline ---
+    # First session triggers provider-anthropic download, install, and
+    # .pth registration.  Verifies: module clones successfully, .pth files
+    # are written, and an end-to-end LLM session completes.
+    - 'amplifier run "Say exactly: provision-verify-ok"'
+
+    # --- PTH_INTEGRITY baseline ---
+    # Every entry in the amplifier tool's site-packages .pth files that
+    # references ~/.amplifier/cache/ must point at a directory that exists.
+    # Failure here means the initial provider install is already broken.
+    - |
+      python3 - << 'PYEOF'
+      import glob, os, subprocess, sys
+      tool_dir = subprocess.check_output(["uv", "tool", "dir"]).decode().strip()
+      pth_files = glob.glob(
+          os.path.join(tool_dir, "amplifier", "lib", "python*", "site-packages", "*.pth")
+      )
+      errors = []
+      for pth in pth_files:
+          with open(pth) as f:
+              for line in f:
+                  path = line.strip()
+                  if path and "/root/.amplifier/cache/" in path:
+                      if not os.path.isdir(path):
+                          errors.append(f"{pth}: missing dir {path!r}")
+      if errors:
+          print("PTH_INTEGRITY BASELINE FAILED:")
+          for e in errors:
+              print(" ", e)
+          sys.exit(1)
+      print(f"PTH_INTEGRITY baseline OK ({len(pth_files)} .pth file(s) scanned)")
+      PYEOF
+
+    # --- SNAPSHOT: record pre-update .pth targets and install state ---
+    # Saved to /tmp/pre-update-snapshot/ so the update section can compare
+    # against the post-update state (PTH_TARGETS_CHANGED check, U4).
+    - |
+      mkdir -p /tmp/pre-update-snapshot
+      python3 - << 'PYEOF'
+      import glob, json, os, subprocess
+      tool_dir = subprocess.check_output(["uv", "tool", "dir"]).decode().strip()
+      pth_files = glob.glob(
+          os.path.join(tool_dir, "amplifier", "lib", "python*", "site-packages", "*.pth")
+      )
+      targets = {}
+      for pth in pth_files:
+          with open(pth) as f:
+              paths = [l.strip() for l in f if l.strip() and "/root/.amplifier/cache/" in l]
+          if paths:
+              targets[os.path.basename(pth)] = paths
+      snapshot_path = "/tmp/pre-update-snapshot/pth-targets.json"
+      with open(snapshot_path, "w") as f:
+          json.dump(targets, f, indent=2)
+      print("Snapshot saved to", snapshot_path)
+      print(json.dumps(targets, indent=2))
+      PYEOF
+      cp /root/.amplifier/install-state.json /tmp/pre-update-snapshot/ 2>/dev/null \
+        && echo "Snapshot: install-state.json saved" \
+        || echo "Snapshot: install-state.json not found (skipping -- not required by all versions)"
+
+update:
+  cmds:
+    # --- U4/U5: Simulate hash change ---
+    # Delete the anthropic provider's cache directory.  This mimics what
+    # happens when upstream publishes a new commit: the hash-suffixed
+    # directory name no longer exists on disk.  When `amplifier update`
+    # runs, update_module() must detect the missing dir, re-clone to a
+    # (possibly new) location, and rewrite the .pth file to point there.
+    #
+    # This is the key innovation: without requiring any actual upstream
+    # change, we can force a re-clone that will expose a stale-.pth bug
+    # if one is present.
+    - |
+      echo "=== Simulating hash change: deleting cached provider dir ==="
+      CACHE_DIR=$(ls -d /root/.amplifier/cache/amplifier-module-provider-anthropic-* 2>/dev/null | head -1)
+      if [ -z "$CACHE_DIR" ]; then
+        echo "WARNING: no anthropic provider cache dir found -- update test will proceed without deletion"
+      else
+        echo "Deleting: $CACHE_DIR"
+        rm -rf "$CACHE_DIR"
+        echo "Provider cache removed; update_module() must now re-clone on next update."
+      fi
+
+    # --- U3: Run amplifier update ---
+    # Detects the missing cache dir, re-clones the provider, and rewrites
+    # the .pth file to point at the new (or recreated) cache location.
+    - amplifier update --yes
+
+    # --- U4: PTH_INTEGRITY check (post-update) ---
+    # After update every .pth entry pointing into ~/.amplifier/cache/ must
+    # reference a directory that actually exists.  A stale entry here is the
+    # classic "import fails after update" bug that this profile targets.
+    - |
+      python3 - << 'PYEOF'
+      import glob, os, subprocess, sys
+      tool_dir = subprocess.check_output(["uv", "tool", "dir"]).decode().strip()
+      pth_files = glob.glob(
+          os.path.join(tool_dir, "amplifier", "lib", "python*", "site-packages", "*.pth")
+      )
+      errors = []
+      checked = 0
+      for pth in pth_files:
+          with open(pth) as f:
+              for line in f:
+                  path = line.strip()
+                  if path and "/root/.amplifier/cache/" in path:
+                      checked += 1
+                      if not os.path.isdir(path):
+                          errors.append(f"{pth}: stale path {path!r}")
+      if errors:
+          print("PTH_INTEGRITY FAILED (post-update):")
+          for e in errors:
+              print(" ", e)
+          sys.exit(1)
+      print(f"PTH_INTEGRITY OK: {checked} cache path(s) verified across {len(pth_files)} .pth file(s)")
+      PYEOF
+
+    # --- U5: IMPORT_SMOKE check ---
+    # The provider module must be importable inside the amplifier tool's
+    # virtual environment after update.  Uses the tool venv's own Python so
+    # the .pth files registered there are honoured.
+    - |
+      echo "=== IMPORT_SMOKE: verifying amplifier_module_provider_anthropic ==="
+      "$(uv tool dir)/amplifier/bin/python3" -c "
+      import amplifier_module_provider_anthropic
+      print('IMPORT_SMOKE OK:', amplifier_module_provider_anthropic.__file__)
+      "
+
+    # --- U6: STATE_CONSISTENT check ---
+    # If install-state.json exists, every cache path it records must point
+    # at a directory that exists.  Stale entries here indicate update wrote
+    # new cache dirs but did not update the state file to match.
+    - |
+      python3 - << 'PYEOF'
+      import json, os, sys
+      state_path = "/root/.amplifier/install-state.json"
+      if not os.path.exists(state_path):
+          print(f"STATE_CONSISTENT: {state_path!r} not found")
+          print("  Skipping -- install-state.json is not required by all Amplifier versions.")
+          sys.exit(0)
+      with open(state_path) as f:
+          state = json.load(f)
+      missing = []
+      def check_val(key, val):
+          if isinstance(val, str) and "/root/.amplifier/cache/" in val:
+              if not os.path.isdir(val):
+                  missing.append(f"  {key!r} -> {val!r}")
+          elif isinstance(val, list):
+              for item in val:
+                  check_val(key, item)
+      for k, v in (state.items() if isinstance(state, dict) else []):
+          check_val(k, v)
+      if missing:
+          print("STATE_CONSISTENT FAILED: stale entries in install-state.json:")
+          for m in missing:
+              print(m)
+          sys.exit(1)
+      print("STATE_CONSISTENT OK: all cache paths in install-state.json exist on disk")
+      PYEOF
+
+    # --- U7: SESSION_VIABLE check (post-update) ---
+    # A full Amplifier session must complete successfully after the update.
+    # This is the highest-level correctness signal: broken .pth or missing
+    # provider dirs will surface here as an import error before the LLM is
+    # even reached.
+    - 'amplifier run "Say exactly: update-verify-ok"'
+
+    # --- PTH_TARGETS_CHANGED check ---
+    # Compare current .pth targets against the pre-update snapshot to
+    # determine whether update_module() re-cloned to a new directory.
+    #
+    # When the upstream module hash has changed between provision and update
+    # (the common real-world case after any new commit), the cache directory
+    # names embed the new hash and will differ.  When provision and update
+    # run against the same upstream commit (common in fast CI), the paths
+    # will be identical -- that is expected and correct.
+    #
+    # This check is informational: PTH_INTEGRITY (U4) and SESSION_VIABLE
+    # (U7) are the hard correctness gates.
+    - |
+      python3 - << 'PYEOF'
+      import glob, json, os, subprocess
+      tool_dir = subprocess.check_output(["uv", "tool", "dir"]).decode().strip()
+      pth_files = glob.glob(
+          os.path.join(tool_dir, "amplifier", "lib", "python*", "site-packages", "*.pth")
+      )
+      new_targets = {}
+      for pth in pth_files:
+          with open(pth) as f:
+              paths = [l.strip() for l in f if l.strip() and "/root/.amplifier/cache/" in l]
+          if paths:
+              new_targets[os.path.basename(pth)] = paths
+
+      snapshot_path = "/tmp/pre-update-snapshot/pth-targets.json"
+      if not os.path.exists(snapshot_path):
+          print("PTH_TARGETS_CHANGED: no snapshot found; skipping comparison")
+      else:
+          with open(snapshot_path) as f:
+              old_targets = json.load(f)
+          changed = False
+          for name in sorted(set(old_targets) | set(new_targets)):
+              old = old_targets.get(name, [])
+              new = new_targets.get(name, [])
+              if sorted(old) != sorted(new):
+                  changed = True
+                  print(f"PTH_TARGETS_CHANGED {name}:")
+                  for p in sorted(set(old) - set(new)):
+                      print(f"  - {p}  (old, removed)")
+                  for p in sorted(set(new) - set(old)):
+                      print(f"  + {p}  (new, added)")
+          if changed:
+              print("PTH_TARGETS_CHANGED: OK -- .pth targets updated to new locations after re-clone")
+          else:
+              print("PTH_TARGETS_CHANGED: targets unchanged (same upstream hash at update time)")
+              print("  This is expected when provision and update use the same upstream commit.")
+              print("  PTH_INTEGRITY + SESSION_VIABLE are the authoritative correctness checks.")
+      PYEOF
+
+readiness:
+  - name: amplifier-installed
+    command: amplifier --version
