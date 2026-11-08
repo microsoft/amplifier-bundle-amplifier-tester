@@ -1,0 +1,45 @@
+# Run with tests/run_smart_dtu_lifecycle.py on the selected daemon's host.
+# Required source paths are approved snapshots, not live homes or credentials.
+name: amplifier-tester-self-validation
+x-dtu:
+  description: Credential-free Foundation install and tester behavior composition
+  twin_machine: tester
+  repositories:
+    - path: ${DTU_TESTER_REPO:?select the tester checkout}
+      url: https://github.com/microsoft/amplifier-bundle-amplifier-tester
+    - path: ${DTU_FOUNDATION_REPO:?select the Foundation checkout}
+      url: https://github.com/microsoft/amplifier-foundation
+    - path: ${DTU_SKILLS_REPO:?select the skills checkout}
+      url: https://github.com/microsoft/amplifier-bundle-skills
+    - path: ${DTU_SMART_TOOL_REPO:?select the pinned Smart Tool checkout}
+      url: https://github.com/microsoft/amplifier-smart-tool-digital-twin-universe
+  allow:
+    - pypi.org
+    - files.pythonhosted.org
+    - deb.debian.org
+services:
+  tester:
+    build:
+      context: .
+      args:
+        PYTHON_IMAGE: ${DTU_PYTHON_IMAGE:?select an approved Debian-based Python image digest}
+    user: "1000:1000"
+    working_dir: /home/tester
+    environment:
+      HOME: /home/tester
+      XDG_CONFIG_HOME: /home/tester/.config
+      XDG_CACHE_HOME: /home/tester/.cache
+      XDG_DATA_HOME: /home/tester/.local/share
+      PIP_CONFIG_FILE: /dev/null
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+    command: [sleep, infinity]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 1.0
+    mem_limit: 2g
+    pids_limit: 256
+    healthcheck:
+      test: [CMD, /usr/local/bin/python, -c, "import os; assert os.getuid() == 1000"]
+      interval: 2s
+      timeout: 5s
+      retries: 10

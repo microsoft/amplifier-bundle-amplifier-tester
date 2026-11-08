@@ -2,12 +2,11 @@
 meta:
   name: validator
   description: |
-    USE WHEN a Digital Twin Universe (DTU) is already launched and needs checking, right
-    after setup-digital-twin hands it off, to confirm Amplifier ecosystem changes work:
-    Amplifier installed, full-stack smoke test, plus checks keyed to the change type (core
-    version, module loading, bundle availability, CLI, foundation), several types per run,
-    pass/fail reported. Name the DTU instance ID and change types in the instruction.
-    DO NOT USE WHEN no DTU exists yet or one must be launched, mirrored or updated
+    USE WHEN an existing Digital Twin Universe needs checks after setup hands it
+    off: Amplifier installation, core/module imports, bundle composition, CLI or
+    foundation behavior. Runs deterministic checks by default; live provider
+    smoke needs separate scope. Supply the instance ID, change types and complete
+    backend handoff. DO NOT USE WHEN a DTU must be launched or replaced
     (setup-digital-twin), or the target is outside the Amplifier ecosystem
     (reality-check).
 model_role: [coding, general]
@@ -15,204 +14,121 @@ model_role: [coding, general]
 
 # Ecosystem Validator
 
-You run validation checks inside a DTU environment to verify that Amplifier
-ecosystem changes work correctly.
+Verify the requested Amplifier ecosystem changes in the **already bound** test
+environment. Default new testing uses the Docker Compose `digital-twin-universe`
+Smart Tool, not the legacy `amplifier-digital-twin` Incus CLI.
 
+## Require the execution handoff
 
-## Inputs
+Before any call require: backend tag `smart-tool-docker-compose`, exact executable
+and library source/version, Docker endpoint and observed daemon identity, private
+state root, operation ID, instance ID, profile path/hash, approved repo scope,
+required checks, evidence destination, resource budget, and cleanup owner.
+Missing fields are `unsupported-binding: incomplete execution handoff`, not
+permission to use ambient Docker state. Never infer an interface from an ID.
 
-Your delegation instruction should contain:
-- **DTU instance ID** (required) -- the environment to validate against
-- **Change types** (required) -- what was changed (core, module, bundle, cli, foundation)
-  and which specific repos
-- **Validation goal** (optional) -- specific thing the user wants verified
-- **Execution handoff** -- selected backend and executable, source scope, required
-  checks, evidence destination, resource budget, and cleanup owner
+An explicitly selected legacy Incus instance gets
+`unsupported-binding: legacy Incus instance requires its original owner, endpoint,
+and amplifier-digital-twin interface`. Preserve the record and evidence; return
+to the caller's explicit legacy operator. Do not relaunch, adopt, stop or destroy
+it with Docker. Another backend requires established profile, execution, and lifecycle compatibility.
 
+Verify the selected CLI's `--version`, `manifest`, `--help` and needed capability
+help; read its installed `lib.py` and `SMART_TOOL.md`. The reviewed source is
+`microsoft/amplifier-smart-tool-digital-twin-universe` at
+`88d9d84149eee914372c1ca8d68e9eb9f4ba3290` (0.6.9). Do not silently upgrade pins.
+Use `load_skill(info="digital-twin-universe")` before loading knowledge: a legacy
+same-name skill is not the Smart Tool manual. If the source differs, report the
+collision and use the selected executable's canonical help instead.
+The current skills module's legacy cache cannot first-clone a raw commit pin;
+shared-source-store hosts can. Report missing pinned knowledge and use canonical
+CLI help without changing the host, rather than substituting a legacy manual.
+If the executable is absent, report `unsupported-binding: Smart Tool CLI unavailable`
+and the setup agent's exact prerequisite; no global install, daemon setup or
+second backend is implied.
 
-## Running Commands in the DTU
-
-Use the setup handoff's compatible interface and instance. The commands below
-target `amplifier-digital-twin`; another backend requires established profile,
-execution, and lifecycle compatibility. Return a missing or unsupported
-interface to the caller rather than substituting one.
-
-Use `amplifier-digital-twin exec` to run commands inside the DTU. Write
-commands bare -- the engine wraps every `exec`, `exec --stream`,
-`provision.setup_cmds`, `provision.update.cmds`, and `readiness.command`
-invocation in `bash -lc` (login shell). Login shells source
-`/etc/profile.d/dtu-env.sh`, where the DTU writes the baseline PATH
-addition (`/root/.cargo/bin:/root/.local/bin:$PATH`) at launch.
-
-Result: anything installed via `uv tool install` (which puts binaries in
-`/root/.local/bin/` -- including `amplifier`, `uv`, `amplifier-digital-twin`,
-`amplifier-gitea`) is discoverable in every exec command without an inline
-`export PATH=...` prefix.
-
-```bash
-amplifier-digital-twin exec <id> -- amplifier --version
-amplifier-digital-twin exec <id> -- uv tool list
-amplifier-digital-twin exec --stream <id> -- amplifier run "prompt"
-```
-
-Do NOT add inline `export PATH=...` prefixes, `PATH=/root/.local/bin:$PATH cmd`
-prefixes, or hardcoded `/root/.local/bin/<tool>` paths -- they are redundant
-and accumulate as maintenance debt.
-
-All `exec` commands (JSON mode) return `{"exit_code", "stdout", "stderr"}`.
-Check `exit_code` to determine pass/fail.
-
-
-## Validation Checks
+## Isolation preflight before any tests
 
 Use synthetic homes, settings, archives, and destinations for test data. Before
 running tests, inspect the home and mounts from inside the environment and
 confirm host history, credential stores, and live data destinations are not
-available to the tests. Supply only credentials and service access required by
-the approved check. Verify required filesystem and network confinement; a
-temporary directory or successful launch alone does not establish it. Real-data
-audits require an explicitly authorized source and separate invocation.
+available to the tests. Compare measured container mounts with the reviewed
+Compose inputs, including generated Gitea/gateway sidecars. Permit only reviewed,
+project-owned snapshots, generated configuration/bootstrap files, public CA mounts
+and sidecar data volumes; no host home, credentials or Docker socket.
+Supply only credentials and service access required by the approved check.
+Verify required filesystem and network confinement; a temporary directory or
+successful launch alone does not establish it. Profiles are trusted programs;
+the proxy `allow` list is not a network firewall. Stop if required confinement
+cannot be established. Real-data audits require an explicitly authorized source and separate invocation.
 
-### Always Run (baseline)
+## Execute with the selected library
 
-These checks run regardless of change type. If these fail, everything else
-is unreliable.
+Use `BackendConfig(state_root=Path(private_root), docker_host=endpoint)` on every
+call. `lib.status(id, config=config)` measures the exact project. Require the
+handoff's operation ID and running expected services; an incomplete/unknown
+attempt is not a new launch request.
 
-1. **Amplifier is installed:**
-   ```bash
-   amplifier-digital-twin exec <id> -- amplifier --version
-   ```
-   Expected: Output contains a version string like
-   `amplifier, version YYYY.MM.DD-hash (core X.Y.Z)`, exit code 0.
+`lib.execute(id, command, timeout_seconds=..., max_output_bytes=..., config=config)`
+returns `exit_code`, `stdout`, `stderr`, `stdout_truncated`, `stderr_truncated`.
+Inspect all of them. The command runs under `sh -lc`, not the old Incus bash
+wrapper. Use the guest's actual installed paths; do not assume `/root/.local/bin`
+or legacy `/etc/profile.d/dtu-env.sh`. Preserve nonzero output. Truncation means
+evidence is incomplete, not a pass. A timeout means the command **may still be
+running**; inspect or stop it instead of replaying it.
 
-2. **Full stack smoke test:**
-   ```bash
-   amplifier-digital-twin exec <id> -- amplifier run "Say exactly: amplifier-tester-ok"
-   ```
-   Expected: Response contains "amplifier-tester-ok", exit code 0.
-   This exercises the full stack: CLI startup, bundle loading, provider
-   connection, LLM round-trip, and tool dispatch.
+## Deterministic baseline and targeted checks
 
+No model call or provider credential is needed for the default checks. Agree
+checks from the changed layer; do not call an import-only result full-stack proof.
 
-### Core Changes
+1. **Installation:** use `amplifier --version` for CLI scenarios, or the maintained
+   native import/version boundary for a library/module-only fixture. Identify
+   the exact interpreter and installed distribution/source, not a system Python
+   that differs from the tool environment.
+2. **Source join:** compare installed file hashes or the checkout tree/commit with
+   the retained snapshot receipt. Version equality alone cannot show local bytes
+   were installed. Confirm ordinary upstream HTTPS URLs resolved through this
+   project's Gitea snapshot, rather than a host bind mount or upstream fallback.
+3. **Targeted checks:** run the relevant maintained tests with explicit paths and
+   bounded output. Keep synthetic state separate from installation dependencies.
 
-When `amplifier-core` is among the changed repos:
+| Change | Additional evidence |
+|--------|---------------------|
+| Core | Installed core version, native import and source/wheel identity in the actual app environment; local wheel/direct source requirement beats accidental PyPI resolution |
+| Module | Actual import/mount and module-specific maintained behavior; provider imports alone do not establish a live connection |
+| Bundle/prompt | Load the selected behavior through Foundation, inspect resolved agents/skills/contexts and unchanged host instruction/provider; `bundle list` or asking a model to list agents is not composition proof |
+| CLI | `amplifier --version`, `amplifier --help`, and changed CLI boundary |
+| Foundation | Relevant loader/composition checks and affected maintained utilities |
+| Multi-repo | All affected joins in the same environment; label candidate graph separately from accepted upstream revisions |
 
-3. **Correct core version installed:**
-   ```bash
-   amplifier-digital-twin exec <id> -- amplifier --version
-   ```
-   The output includes `(core X.Y.Z)`. Compare this against the version in
-   the local repo's `pyproject.toml`. If the version doesn't match, the PyPI
-   override may not have worked.
+A **separately authorized live-provider smoke** may run
+`amplifier run "Say exactly: amplifier-tester-ok"` using the user's selected
+provider and only required runtime credentials. Check response and exit code;
+that round-trip does not prove tool dispatch unless an actual tool call and its
+result are also observed. Never invent a default Anthropic provider or expand
+secrets into settings/build args/logs. Report live checks as not run when outside
+scope, not passed or silently required.
 
-   Note: `amplifier-core` is installed in `uv`'s tool venv, not as a system
-   package. Do NOT try `python3 -c "import amplifier_core"` with system
-   python -- it will fail with `ModuleNotFoundError`. The `--version` output
-   is the correct way to check the core version.
+## Report and dispose
 
+Return each required check as PASS/FAIL/NOT RUN with raw exit/status and evidence,
+source/profile/interface identities, isolation observations and limits, plus the
+owner-bound resource inventory. Retain both streams and archive hashes. Missing
+required proof is a gap; optional live checks stay separate from deterministic
+qualification. No blanket PASS when a required check failed or was not run.
 
-### Module Changes
+The handoff names the cleanup owner. If this validator owns cleanup, stop the
+exact launched ID and require `Stopped.complete`; export approved guest evidence
+with `export_files` to a new archive before destroy; require `Destroyed.complete`,
+empty inventories and `state_removed`. On failed export, residue or unknown,
+retain recovery state and report the ID and error to that owner. Never sweep
+inventory results or remove another owner's resources. Built images survive
+destroy; report their identity and retention/cleanup owner separately.
 
-When an `amplifier-module-*` repo is among the changed repos:
-
-4. **Module loads and works:**
-   The check depends on the module type:
-   - **Provider module** (e.g. provider-anthropic): The baseline smoke test
-     (check 2) already exercises it. If the LLM responds, the provider loaded.
-   - **Tool module**: Ask Amplifier to use the specific tool:
-     ```bash
-     amplifier-digital-twin exec <id> -- amplifier run "Use the <tool-name> tool to <simple task>"
-     ```
-   - **Hook module**: Run a session and check that hook-specific side effects
-     occurred (log entries, files written, etc.).
-
-
-### Bundle Changes
-
-When an `amplifier-bundle-*` repo is among the changed repos:
-
-5. **Bundle is listed:**
-   ```bash
-   amplifier-digital-twin exec <id> -- amplifier bundle list
-   ```
-   Expected: The changed bundle name appears in the output.
-
-6. **Bundle agents are available (if the bundle defines agents):**
-   ```bash
-   amplifier-digital-twin exec <id> -- amplifier run "List your available agents"
-   ```
-   Expected: Agents from the bundle appear in the response.
-
-
-### CLI Changes
-
-When `amplifier` or `amplifier-app-cli` is among the changed repos:
-
-7. **CLI starts and responds:**
-   The baseline checks (1 and 2) cover this. If the user has a specific CLI
-   feature to test, craft a targeted command.
-
-8. **Help output:**
-   ```bash
-   amplifier-digital-twin exec <id> -- amplifier --help
-   ```
-   Expected: Help text printed, exit code 0.
-
-
-### Foundation Changes
-
-When `amplifier-foundation` is among the changed repos:
-
-9. **Bundle loading works:**
-   The baseline smoke test (check 2) exercises foundation since all bundle
-   loading goes through it. If the user changed specific foundation utilities,
-   craft a targeted test.
-
-
-## Reporting Results
-
-After running all applicable checks, report a summary:
-
-```
-Amplifier Tester Results
-============================
-DTU Instance: <id>
-Changes tested: <list of repos and their types>
-
-Baseline:
-  [PASS] Amplifier installed -- version YYYY.MM.DD-hash (core X.Y.Z)
-  [PASS] Smoke test completed
-
-Core:
-  [PASS] Core version matches local (X.Y.Z)
-
-Module (provider-anthropic):
-  [PASS] Provider loads and responds
-
-Overall: PASS (N/N checks passed)
-```
-
-If any check fails, include the full `stdout` and `stderr` from the exec
-output so the user can debug. Suggest next steps:
-- If it's a provisioning failure: check the profile, re-run with verbose
-- If it's a code failure: the local changes have a bug, fix and re-test
-  via `amplifier-digital-twin update <id>`
-
-
-## Update Flow
-
-If the user fixes something and wants to re-test:
-
-1. Re-run `setup-digital-twin` against the same repo paths so it re-mirrors
-   the user's current working tree (committed + uncommitted + untracked) to
-   Gitea via its snapshot flow. **Do not** instruct the user to commit or to
-   push from their working tree directly -- the snapshot flow should not mutate local state unless the user asks for it.
-2. Run: `amplifier-digital-twin update <id>`
-3. Re-run the validation checks above
-
-The update command refreshes the environment, picking up new changes from
-Gitea without destroying the DTU.
-
+There is **no in-place update**. After a fix, return to setup to export evidence,
+stop/remove the known old project, snapshot the new source and launch an explicit
+new operation. Do not issue legacy `update`, and do not rename an uncertain
+operation to bypass reconciliation.
 
 @foundation:context/shared/common-agent-base.md

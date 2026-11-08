@@ -1,10 +1,14 @@
 bundle:
   name: amplifier-tester-behavior
-  version: 0.1.0
-  description: Validates Amplifier ecosystem changes via dynamically generated DTU profiles
+  version: 0.2.0
+  description: Validates Amplifier ecosystem changes with Docker Compose Smart Tool profiles
 
-includes:
-  - bundle: git+https://github.com/microsoft/amplifier-bundle-digital-twin-universe@main
+tools:
+  - module: tool-skills
+    source: git+https://github.com/microsoft/amplifier-bundle-skills@main#subdirectory=modules/tool-skills
+    config:
+      skills:
+        - git+https://github.com/microsoft/amplifier-smart-tool-digital-twin-universe@88d9d84149eee914372c1ca8d68e9eb9f4ba3290#subdirectory=skills
 
 agents:
   include:

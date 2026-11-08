@@ -116,7 +116,7 @@ def test_execution_handoff_and_isolation_are_in_specialist_bodies() -> None:
     assert "rather than translating commands or installing a second backend" in setup
     assert "Before any tests, provider warm-up, or readiness smoke" in setup
     assert "before those checks in both provision and update commands" in setup
-    assert "another backend requires established profile, execution, and lifecycle compatibility" in validator
+    assert "another backend requires established profile, execution, and lifecycle compatibility" in validator.lower()
     assert "inspect the home and mounts from inside the environment" in validator
     assert "Real-data audits require an explicitly authorized source and separate invocation" in validator
     for path in _agent_files():

@@ -213,6 +213,7 @@ jobs:
           # one fails only when a user launches an environment. Parse them
           # here; they carry no bundle.name, so only parseability is asserted.
           profiles = sorted((root / ".amplifier").rglob("*.yaml"))
+          profiles += sorted((root / ".agents").rglob("*.yaml"))
           for path in profiles:
               rel = path.relative_to(root).as_posix()
               try:

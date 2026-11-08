@@ -22,57 +22,59 @@ digraph amplifier_tester {
         color="#2E86C1"
         fontcolor="#2E86C1"
 
-        setup_digital_twin [label="setup-digital-twin\n\nGather context\nClassify repos\nMirror to Gitea\nGenerate profile\nLaunch + verify" shape=box fillcolor="#AED6F1" style="filled,rounded"]
+        setup_digital_twin [label="setup-digital-twin\n\nBind endpoint + owner\nInspect isolation\nSnapshot approved repos\nWrite Compose profile\nLaunch + verify" shape=box fillcolor="#AED6F1" style="filled,rounded"]
         ecosystem_validator [label="validator\n\nRun checks\nReport pass/fail" shape=box fillcolor="#AED6F1" style="filled,rounded"]
     }
 
     // --- Gitea ---
     subgraph cluster_gitea {
-        label="Gitea Instance"
+        label="Owned Gitea Sidecar"
         style=rounded
         color="#27AE60"
         fontcolor="#27AE60"
 
-        gitea_repos [label="Mirrored Repos\n+ local changes" shape=cylinder fillcolor="#D5F5E3" style=filled]
+        gitea_repos [label="Private Snapshots\n+ source receipts" shape=cylinder fillcolor="#D5F5E3" style=filled]
     }
 
     // --- DTU ---
     subgraph cluster_dtu {
-        label="Digital Twin Universe"
+        label="Smart Tool: one owned Compose project"
         style=rounded
         color="#E67E22"
         fontcolor="#E67E22"
 
         subgraph cluster_dtu_inside {
-            label="Incus Container"
+            label="Docker Compose Twin"
             style=dashed
             color="#F0B27A"
 
-            amplifier_install [label="Amplifier CLI\n(installed from\nGitea via rewrites)" shape=box fillcolor="#FDEBD0" style="filled,rounded"]
-            smoke_test [label="Smoke Tests\n(version, import,\nrun, bundle list)" shape=box fillcolor="#FDEBD0" style="filled,rounded"]
+            amplifier_install [label="Amplifier components\n(installed through\nupstream HTTPS URLs)" shape=box fillcolor="#FDEBD0" style="filled,rounded"]
+            smoke_test [label="Deterministic Checks\n(source joins, imports,\nresolved composition)" shape=box fillcolor="#FDEBD0" style="filled,rounded"]
         }
 
-        dtu_profile [label="Generated\nProfile YAML" shape=note fillcolor="#FAD7A0" style=filled]
+        dtu_profile [label="compose.yaml\n+ x-dtu.repositories" shape=note fillcolor="#FAD7A0" style=filled]
+        teardown [label="Stop -> export evidence\n-> destroy exact project\nReport retained images" shape=box fillcolor="#FDEBD0" style="filled,rounded"]
     }
 
     // --- Edges ---
     amplifier_session -> setup_digital_twin [label="1. set up a\ndigital twin"]
     local_repos -> setup_digital_twin [label="repo paths\nor workspace" style=dashed]
 
-    setup_digital_twin -> gitea_repos [label="2. mirror +\npush changes"]
-    setup_digital_twin -> dtu_profile [label="3. generate\nprofile"]
-    dtu_profile -> amplifier_install [label="4. launch DTU\n(url_rewrites\n+ pypi_overrides)"]
+    setup_digital_twin -> gitea_repos [label="2. snapshot\n(no source mutation)"]
+    setup_digital_twin -> dtu_profile [label="3. write\nprofile"]
+    dtu_profile -> amplifier_install [label="4. launch\nexplicit operation ID"]
     gitea_repos -> amplifier_install [label="serves code\n(looks like upstream)" style=dashed]
 
     setup_digital_twin -> smoke_test [label="5. verify"]
     setup_digital_twin -> amplifier_session [label="6. report\nresults"]
 
     ecosystem_validator -> smoke_test [label="targeted\nchecks" style=dashed]
+    smoke_test -> teardown [label="retain outcomes"]
 
     // --- External ---
     pypi [label="PyPI" shape=box3d fillcolor="#F5F5F5" style=filled]
-    anthropic [label="Anthropic API" shape=box3d fillcolor="#F5F5F5" style=filled]
+    provider [label="Selected Provider\n(separately authorized)" shape=box3d fillcolor="#F5F5F5" style=filled]
 
-    amplifier_install -> pypi [label="non-overridden\npackages" style=dotted]
-    amplifier_install -> anthropic [label="passthrough\n(smoke test)" style=dotted]
+    amplifier_install -> pypi [label="dependencies\n(core changes explicit)" style=dotted]
+    amplifier_install -> provider [label="optional live check\nnot default" style=dotted]
 }

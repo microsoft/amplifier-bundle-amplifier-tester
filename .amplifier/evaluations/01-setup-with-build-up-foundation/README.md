@@ -1,5 +1,17 @@
 # Evaluation 01: Setup with build-up-foundation
 
+**Historical Incus/model-backed evaluation, not the Smart Tool default.** The
+original scenario, criteria and profile remain below for evidence interpretation.
+Its runner now refuses before provisioning: the current tester deliberately does
+not adopt old Incus instances. Reproduction requires a separately approved legacy
+operator and the original revisions, not today's tester at `main`.
+
+For maintained deterministic Smart Tool qualification use
+`tests/run_smart_dtu_lifecycle.py` and
+`.agents/digital-twin-universe/amplifier-tester-self-validation/compose.yaml`.
+That check does not repeat this paid agent-behavior experiment or claim its
+build-up-foundation/provider criteria passed.
+
 A worked example of the amplifier-tester `setup-digital-twin` agent handling a
 realistic, slightly-imprecise user ask. Single-variant capability eval — does
 the agent correctly resolve the ask and produce a working DTU?
