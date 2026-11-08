@@ -184,6 +184,7 @@ def main() -> int:
             f"git+{URLS['foundation']}@{receipts['foundation']['snapshot_commit']}",
             f"git+{URLS['skills']}@{receipts['skills']['snapshot_commit']}#subdirectory=modules/tool-skills",
             "pytest==9.1.1",
+            "pytest-asyncio==1.4.0",
         ])
         execute(lib, uid, config, evidence, "install", install)
         execute(lib, uid, config, evidence, "composition", "/home/tester/venv/bin/python /home/tester/src/tester/tests/check_smart_dtu_composition.py --tester /home/tester/src/tester --foundation /home/tester/src/foundation --evidence /home/tester/evidence")
