@@ -40,6 +40,9 @@ help; read its installed `lib.py` and `SMART_TOOL.md`. The reviewed source is
 Use `load_skill(info="digital-twin-universe")` before loading knowledge: a legacy
 same-name skill is not the Smart Tool manual. If the source differs, report the
 collision and use the selected executable's canonical help instead.
+The current skills module's legacy cache cannot first-clone a raw commit pin;
+shared-source-store hosts can. Report missing pinned knowledge and use canonical
+CLI help without changing the host, rather than substituting a legacy manual.
 If the executable is absent, report `unsupported-binding: Smart Tool CLI unavailable`
 and the setup agent's exact prerequisite; no global install, daemon setup or
 second backend is implied.

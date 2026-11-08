@@ -41,6 +41,13 @@ references. Profiles are trusted Compose programs, not hostile-code sandboxes;
 the proxy allowlist is not an egress firewall. Native Windows/WSL live qualification
 is not established by this bundle.
 
+The immutable skill source requires Foundation's shared source store
+(`AMPLIFIER_SOURCE_STORE`, configured by the host). Current tool-skills' legacy
+cache tries `git clone --branch <commit>` and cannot resolve a raw commit on first
+load. In that mode, setup reports unavailable knowledge and reads the selected
+installed executable's canonical help; it never substitutes the legacy skill,
+changes the pin, or changes global source-store settings.
+
 
 ## Installation
 
@@ -136,7 +143,7 @@ It requires explicit approved tester/Foundation/skills/Smart Tool source paths,
 Docker endpoint, private state/evidence roots, image digest, owner and operation ID.
 Run it on the daemon's host (for example, in the approved Spark-2 task folder),
 not by pointing Spark-1's local snapshot paths at remote Docker.
-It installs Foundation from the served local repository, checks native imports,
+It uses a private shared source store, installs Foundation from the served local repository, checks native imports,
 loads this behavior, resolves the Smart Tool skill, tests the legacy collision,
 and exports evidence before exact-project teardown. No paid calls are made.
 Generated Gitea/gateway containers count as sidecars of the owned project.

@@ -25,6 +25,10 @@ Set up and verify the requested Amplifier ecosystem change end-to-end. Default t
    when another host source precedes this one: **do not load legacy instructions**
    as the Smart Tool manual. Use the selected executable's help below instead and
    report the collision; do not silently reorder the host's skill sources.
+   A missing pinned skill is also reported, not replaced with a legacy manual.
+   The current skills module needs the host's shared source store for raw commit
+   pins; its legacy cache cannot clone a commit as a branch. Use canonical CLI
+   help when unavailable, without changing the pin or global configuration.
 2. Resolve the caller-selected executable (default `digital-twin-universe`). Run
    its `--version`, `manifest`, `--help`, and each needed capability's `--help`.
    Read the canonical `SMART_TOOL.md` and library `lib.py` beside the installed

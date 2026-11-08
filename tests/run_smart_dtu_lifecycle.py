@@ -55,6 +55,8 @@ def execute(lib, uid: str, config, evidence: Path, stage: str, command: str, tim
 
 
 def main() -> int:
+    if not __debug__:
+        raise RuntimeError("Run without Python optimization: assertions are required checks")
     parser = argparse.ArgumentParser(description=__doc__)
     for source in URLS:
         parser.add_argument("--" + source.replace("_", "-") + "-repo", type=Path, required=True)
@@ -66,6 +68,8 @@ def main() -> int:
     parser.add_argument("--owner", required=True)
     parser.add_argument("--python-image", required=True, help="Debian-based Python image pinned @sha256")
     args = parser.parse_args()
+    if not args.docker_host.startswith("unix:///"):
+        parser.error("this source-snapshot fixture requires a local Unix Docker socket on the same host")
     os.umask(0o077)
     sources = {key: getattr(args, key + "_repo").resolve() for key in URLS}
     evidence = args.evidence.resolve()
@@ -185,9 +189,11 @@ def main() -> int:
         execute(lib, uid, config, evidence, "composition", "/home/tester/venv/bin/python /home/tester/src/tester/tests/check_smart_dtu_composition.py --tester /home/tester/src/tester --foundation /home/tester/src/foundation --evidence /home/tester/evidence")
         execute(lib, uid, config, evidence, "guards", "cd /home/tester/src/tester && /home/tester/venv/bin/python -m pytest tests/ -q")
         # Source joins for the installed library and cloned candidate tree.
-        joined = execute(lib, uid, config, evidence, "source-joins", "git -C /home/tester/src/tester rev-parse HEAD HEAD^{tree}; /home/tester/venv/bin/python -c 'import json, importlib.metadata as m; print(m.distribution(\"amplifier-foundation\").read_text(\"direct_url.json\"))'")
+        joined = execute(lib, uid, config, evidence, "source-joins", "git -C /home/tester/src/tester rev-parse HEAD HEAD^{tree}; /home/tester/venv/bin/python -c 'import json, importlib.metadata as m; print(m.distribution(\"amplifier-foundation\").read_text(\"direct_url.json\")); print(m.distribution(\"amplifier-module-tool-skills\").read_text(\"direct_url.json\")); print(json.load(open(\"/home/tester/evidence/composition.json\"))[\"skill_file_sha256\"])'")
         assert receipts["tester"]["snapshot_tree"] in joined.stdout
         assert receipts["foundation"]["snapshot_commit"] in joined.stdout
+        assert receipts["skills"]["snapshot_commit"] in joined.stdout
+        assert sha(sources["smart_tool"] / "skills/digital-twin-universe/SKILL.md") in joined.stdout
         passed = True
     except Exception as exc:
         save(evidence, "check-error.json", {"error": str(exc), "type": type(exc).__name__})
@@ -199,6 +205,9 @@ def main() -> int:
             raise RuntimeError("stop incomplete; preserve state and notify cleanup owner")
         archive = lib.export_files(uid, "/home/tester/evidence", evidence / "guest-evidence.tar", max_bytes=16777216, config=config)
         save(evidence, "export.json", archive)
+        if not passed:
+            save(evidence, "retained-failure.json", {"owner": args.owner, "instance_id": uid, "state_root": str(state_root), "reason": "failed/unknown checks: stopped and exported; retain exact project for inspection before explicit cleanup"})
+            raise RuntimeError("checks failed; exact stopped project retained for cleanup owner")
         destroyed = lib.destroy(uid, config=config)
         save(evidence, "destroy.json", destroyed)
         destroyed.require_removed()

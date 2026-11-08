@@ -12,8 +12,8 @@ import asyncio
 import hashlib
 import importlib.metadata
 import json
+import os
 from pathlib import Path
-import subprocess
 
 PIN = "88d9d84149eee914372c1ca8d68e9eb9f4ba3290"
 SKILL_SOURCE = (
@@ -27,11 +27,15 @@ def sha(path: Path) -> str:
 
 
 async def check(tester: Path, foundation: Path, evidence: Path) -> dict:
+    if not __debug__:
+        raise RuntimeError("Run without Python optimization: assertions are required checks")
     import amplifier_core
     import amplifier_core._engine
     import amplifier_foundation
+    from amplifier_core import AmplifierSession
     from amplifier_foundation import Bundle, BundleRegistry, load_bundle
-    from amplifier_module_tool_skills import SkillsTool, _resolve_skill_sources
+    from amplifier_foundation.bundle import PreparedBundle, BundleModuleResolver
+    from amplifier_module_tool_skills import SkillsTool, mount
 
     registry = BundleRegistry(home=evidence / "registry", persist=False, read_persisted=False)
     registry.register({"foundation": str(foundation)})
@@ -47,6 +51,12 @@ async def check(tester: Path, foundation: Path, evidence: Path) -> dict:
         providers=[{"module": "selected-provider", "config": {"sentinel": "no-credential"}}],
     )
     composed = host.compose(behavior)
+    composed.resolve_pending_context()
+    composed.load_agent_metadata()
+    assert not composed._pending_context
+    for name in composed.agents:
+        assert composed.resolve_agent_path(name).is_file()
+        assert composed.agents[name]["description"].startswith("USE WHEN")
     assert composed.instruction == host.instruction
     assert composed.providers == host.providers
     assert composed.session == host.session
@@ -62,18 +72,28 @@ async def check(tester: Path, foundation: Path, evidence: Path) -> dict:
     config = dict(tools[0]["config"])
     assert config["skills"] == [SKILL_SOURCE]
     config["cache_dir"] = str(evidence / "skills-cache")
-    origins: dict[Path, str] = {}
-    dirs, pending = await _resolve_skill_sources(config, None, origins)
-    assert not pending and len(dirs) == 1
-    tool = SkillsTool(config, resolved_dirs=dirs)
+    # Shared-store mode supports immutable commit sources. Older skills caches
+    # use git clone --branch <ref> and cannot resolve a raw commit on first load.
+    # Keep this test-private and report the mode, not blanket host compatibility.
+    os.environ["AMPLIFIER_SOURCE_STORE"] = str(evidence / "source-store")
+    session = AmplifierSession(config={"session": {
+        "orchestrator": "unused-no-model", "context": "unused-no-model",
+    }})
+    cleanup = await mount(session.coordinator, config)
+    tool = session.coordinator.get("tools", "load_skill")
+    dirs = tool.skills_dirs
+    assert not tool._pending_mention_sources and len(dirs) == 1
+    assert tool.skills["digital-twin-universe"].source == SKILL_SOURCE
+    assert tool.skills["digital-twin-universe"].trusted is False
     info = await tool.execute({"info": "digital-twin-universe"})
     loaded = await tool.execute({"skill_name": "digital-twin-universe"})
     assert info.success and loaded.success
     assert "Docker Compose" in loaded.output["content"]
     assert "amplifier-digital-twin" not in loaded.output["content"]
     assert "metadata" in (dirs[0] / "digital-twin-universe/SKILL.md").read_text()
-    skill_commit = subprocess.check_output(["git", "-C", str(dirs[0]), "rev-parse", "HEAD"], text=True).strip()
-    assert skill_commit == PIN
+    # Shared-store immutable objects may not carry a .git directory. Source
+    # identity is the pinned resolver URI + bytes compared with the served pin.
+    skill_file_sha256 = sha(dirs[0] / "digital-twin-universe/SKILL.md")
 
     # Counterexample: a separately included old behavior's source still wins.
     # This tests discovery precedence, not new authority to execute that backend.
@@ -101,28 +121,37 @@ async def check(tester: Path, foundation: Path, evidence: Path) -> dict:
     foundation_installed = Path(amplifier_foundation.__file__)
     assert sha(foundation_source) == sha(foundation_installed)
     direct_url = json.loads(importlib.metadata.distribution("amplifier-foundation").read_text("direct_url.json"))
+    skills_direct_url = json.loads(importlib.metadata.distribution("amplifier-module-tool-skills").read_text("direct_url.json"))
     native = {
         "foundation_version": importlib.metadata.version("amplifier-foundation"),
         "foundation_path": str(foundation_installed), "foundation_file_sha256": sha(foundation_installed),
         "foundation_direct_url": direct_url,
+        "skills_direct_url": skills_direct_url,
         "core_version": importlib.metadata.version("amplifier-core"),
         "core_path": str(Path(amplifier_core.__file__)),
         "core_native_path": str(Path(amplifier_core._engine.__file__)),
     }
-    prompt = composed.instruction + "\n\n" + context_text
+    prepared = PreparedBundle(
+        mount_plan=composed.to_mount_plan(), resolver=BundleModuleResolver({}), bundle=composed,
+    )
+    prompt = await prepared.create_system_prompt_factory(session, session_cwd=evidence)()
+    assert prompt.startswith(host.instruction)
+    assert "Docker Compose DTUs" in prompt and "Incus" not in prompt
     (evidence / "composed-head.txt").write_text(prompt)
     (evidence / "resolved-agents.json").write_text(json.dumps(composed.agents, indent=2, default=str))
     (evidence / "mount-plan.json").write_text(json.dumps(composed.to_mount_plan(), indent=2, default=str))
+    if cleanup:
+        await cleanup()
     return {
         "native_imports": native, "agents": sorted(composed.agents),
         "contexts": {key: str(path) for key, path in composed.context.items()},
         "namespace_roots": {key: str(path) for key, path in composed.source_base_paths.items()},
-        "selected_host_preserved": True, "skill_commit": skill_commit,
-        "skill_sources": {str(key): value for key, value in origins.items()},
+        "selected_host_preserved": True, "skill_requested_commit": PIN,
+        "skill_file_sha256": skill_file_sha256, "skill_resolution": "guest-private shared source store",
         "skill_info": info.output, "skill_load": loaded.output,
         "collision_info": collision_info.output, "collision_detected": True,
         "head_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-        "limits": ["No model dispatch or live provider call", "Not a real user host activation"],
+        "limits": ["No model dispatch or live provider call", "Not a real user host activation", "Legacy skills cache cannot resolve the commit pin on a first clone"],
     }
 
 
