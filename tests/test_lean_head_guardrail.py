@@ -29,10 +29,10 @@ WHAT EACH ASSERTION CAN AND CANNOT PROVE
 Stated plainly, because a guardrail whose limits are not written down gets read
 as proving more than it does.
 
-(a) BYTE PIN — fully proven here. `context/amplifier-tester-awareness.md` is
-    byte-identical to span 2 of the measured V1 head, vendored verbatim in
-    `tests/fixtures/lean-head-v1/`. This is the assertion that goes RED against
-    the pre-change (stock) text.
+(a) HISTORICAL BYTE PIN — V1 remains vendored verbatim with its digest pinned.
+    The Smart Tool migration intentionally changes the backend and Gitea
+    ownership wording. Today's head is not the measured V1; no renewed cost or
+    quality measurement is claimed. Budget, fidelity and stability still apply.
 
 (b) CHAR BUDGET — fully proven here, PER ARTIFACT. Never against a whole-head
     absolute: `zc6t` measured a real composed head at 320,410 chars against a
@@ -67,6 +67,7 @@ Run with `python3 -m pytest tests/ -q` from the repo root.
 from __future__ import annotations
 
 import re
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -205,7 +206,7 @@ def _pinned_stock() -> str:
 
 
 class TestBytePinAgainstTheV1Head:
-    """(a) The shipped file IS the measured V1 text, byte for byte.
+    """(a) Preserve the measured V1 artifact, not a false current-byte claim.
 
     The acceptance criterion is equality with what the shim produced for
     variant v1, not with a prose description of it, so the reference is
@@ -213,14 +214,20 @@ class TestBytePinAgainstTheV1Head:
     for provenance.
     """
 
-    def test_shipped_file_is_byte_identical_to_v1(self) -> None:
+    def test_only_declared_backend_wording_differs_from_v1(self) -> None:
         want = _pinned_lean()
         got = _shipped()
-        assert got == want, (
-            f"{TARGET} has drifted from the V1 lean head ({len(got)} chars vs "
-            f"the pinned {len(want)}). The -13.57% cost reduction was measured "
-            "against these exact bytes.\n"
-            f"--- pinned v1 ---\n{want}\n--- shipped now ---\n{got}"
+        assert got == want.replace(
+            "in isolated DTUs: local ecosystem changes",
+            "in Docker Compose DTUs: local changes",
+        ).replace(
+            "(may create/reuse Gitea)", "(owns its Gitea)"
+        )
+
+    def test_historical_fixture_digest(self) -> None:
+        # Provenance bytes are not rewritten to manufacture a green migration.
+        assert hashlib.sha256(_pinned_lean().encode()).hexdigest() == (
+            "1f9d7b1b6df122ecdc432129c0c55149a6ba636c804cdb8045c8e6d224f2e27a"
         )
 
     def test_the_v1_fixture_is_the_measured_size(self) -> None:

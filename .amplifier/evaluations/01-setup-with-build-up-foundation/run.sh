@@ -22,6 +22,10 @@
 
 set -uo pipefail
 
+# Retained below as historical evidence, not a new default operator binding.
+printf '%s\n' 'unsupported-binding: historical Incus evaluation requires its original revisions and explicit legacy operator; use tests/run_smart_dtu_lifecycle.py for deterministic Smart Tool qualification.' >&2
+exit 2
+
 # ----- helpers ----------------------------------------------------------------
 EXAMPLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

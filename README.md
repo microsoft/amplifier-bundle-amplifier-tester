@@ -1,9 +1,11 @@
 # Amplifier Bundle Amplifier Tester
 
-Validates Amplifier ecosystem changes (bundles, modules, prompts, app-cli, core, foundation) in isolated [Digital Twin Universe](https://github.com/microsoft/amplifier-bundle-digital-twin-universe) environments before they reach real users.
+Validates Amplifier ecosystem changes (bundles, modules, prompts, app-cli, core, foundation) in [Digital Twin Universe](https://github.com/microsoft/amplifier-smart-tool-digital-twin-universe) Docker Compose environments before they reach real users.
 
 The bundle dynamically generates the right profile based on what you actually changed using an agent.
-Then the ecosystem validator mirrors your local repos to Gitea, builds the correct `url_rewrites` and `pypi_overrides`, launches a DTU, and runs validation checks.
+Setup snapshots approved local repos through the Smart Tool's own Gitea sidecar,
+writes a Compose profile with `x-dtu.repositories`, and launches it. The validator
+checks the installed source and behavior. Default checks need no provider or model call.
 
 Example Uses:
 
@@ -15,17 +17,35 @@ Example Uses:
 
 ## Prerequisites
 
-This bundle depends on the Digital Twin Universe bundle (which itself depends on
-[amplifier-bundle-gitea](https://github.com/microsoft/amplifier-bundle-gitea)).
-See their READMEs for prerequisite setup:
+The behavior registers the Smart Tool's on-demand skill, not the old DTU/Gitea
+bundles. It does **not** install Python packages or Docker. The reviewed interface
+is `digital-twin-universe` 0.6.9, source
+`88d9d84149eee914372c1ca8d68e9eb9f4ba3290`. It needs Python 3.13+, Docker CLI,
+Compose, a reachable explicitly selected daemon, and Git for source snapshots.
 
-- [Digital Twin Universe prerequisites](https://github.com/microsoft/amplifier-bundle-digital-twin-universe#prerequisites)
-- [Gitea prerequisites](https://github.com/microsoft/amplifier-bundle-gitea#prerequisites)
+For an explicitly authorized installation, deterministic capabilities need no extras:
+
+```bash
+uv tool install git+https://github.com/microsoft/amplifier-smart-tool-digital-twin-universe@88d9d84149eee914372c1ca8d68e9eb9f4ba3290
+digital-twin-universe --version
+digital-twin-universe manifest
+digital-twin-universe --help
+```
+
+Setup uses the installed library's `check` with a private state root and selected
+endpoint. A missing CLI or daemon is an actionable prerequisite, never permission
+to install globally, start a service or call model-backed `install`/`create-profile`.
+Read the selected tool's [library](https://github.com/microsoft/amplifier-smart-tool-digital-twin-universe/blob/88d9d84149eee914372c1ca8d68e9eb9f4ba3290/docs/01-library.md)
+and [profile](https://github.com/microsoft/amplifier-smart-tool-digital-twin-universe/blob/88d9d84149eee914372c1ca8d68e9eb9f4ba3290/docs/03-profile.md)
+references. Profiles are trusted Compose programs, not hostile-code sandboxes;
+the proxy allowlist is not an egress firewall. Native Windows/WSL live qualification
+is not established by this bundle.
 
 
 ## Installation
 
-If you use `amplifier-foundation`, this bundle is included automatically and the `amplifier-tester:setup-digital-twin` and `amplifier-tester:validator` agents are already available. No install required.
+Hosts that already compose the tester behavior keep the stable
+`amplifier-tester:setup-digital-twin` and `amplifier-tester:validator` names.
 
 To compose into a custom bundle (without foundation), reference the behavior:
 
@@ -35,14 +55,32 @@ amplifier bundle add "git+https://github.com/microsoft/amplifier-bundle-amplifie
 
 `--app` composes the bundle onto every Amplifier session. Remove it to only register the bundle for later activation with `amplifier bundle use`.
 
-This bundle doesn't ship a runtime (no provider, orchestrator, or tools) — it must be composed onto a bundle that does, like `amplifier-foundation`.
+This bundle does not select a provider, orchestrator, context manager or host
+instruction. It adds the skills tool and tester agents to the host you chose.
+The thin root `bundle.md` remains the namespace anchor for repo-level assets.
+
+### Migrating an existing host
+
+Select this updated tester behavior, then explicitly disable the old DTU behavior
+from the **new ordinary-testing composition** if it was separately enabled.
+Merely updating tester cannot remove another host include. Both tools name their
+skill `digital-twin-universe`; source order is first-match-wins. Check
+`load_skill(info="digital-twin-universe")` and the composed prompt. Setup reports
+a collision and uses the selected executable's help rather than loading the old
+manual or silently reordering the host.
+
+Keep legacy records and their original operators/interfaces. An explicit Incus
+request returns `unsupported-binding: legacy Incus instance requires its original
+owner, endpoint, and amplifier-digital-twin interface`. This bundle never converts,
+relaunches or destroys an old instance through Docker. Host activation is a
+separate operator action; installing this source alone changes no live configuration.
 
 
 ## What It Validates
 
-- **Core** (`amplifier-core`) -- PyPI override with a locally built wheel, version check, Python import check
+- **Core** (`amplifier-core`) -- explicit local wheel/direct source in the app environment, native import and source identity (no `pypi_overrides`)
 - **Module** (`amplifier-module-*`) -- URL rewrite to Gitea, smoke test exercises the module
-- **Bundle** (`amplifier-bundle-*`) -- URL rewrite + `bundle add`, verify bundle loads and agents are available
+- **Bundle** (`amplifier-bundle-*`) -- snapshot + behavior composition; inspect resolved agents, skills, contexts and preserved host instruction
 - **CLI** (`amplifier`, `amplifier-app-cli`) -- URL rewrite for install source, help + smoke test
 - **Foundation** (`amplifier-foundation`) -- URL rewrite, bundle loading works
 - **Prompt/context** (agent `.md` or context files in a bundle) -- same as bundle, since prompt changes live in bundles
@@ -51,7 +89,7 @@ This bundle doesn't ship a runtime (no provider, orchestrator, or tools) — it 
 
 ## Agents
 
-- **[Setup Digital Twin](agents/setup-digital-twin.md)** -- gathers context from the user and/or workspace, classifies changes, mirrors to Gitea, generates a DTU profile, launches and verifies the environment.
+- **[Setup Digital Twin](agents/setup-digital-twin.md)** -- binds the interface, snapshots approved sources, writes a Compose profile, launches and verifies the owned environment.
 - **[Ecosystem Validator](agents/validator.md)** -- runs targeted validation checks inside the DTU and reports pass/fail results.
 
 
@@ -62,32 +100,47 @@ This bundle doesn't ship a runtime (no provider, orchestrator, or tools) — it 
 ```
 
 1. **setup-digital-twin** inspects the repo, classifies it as a module change
-2. Reuses or creates a Gitea instance, mirrors from GitHub, pushes local changes on top
-3. Generates a DTU profile with the correct `url_rewrites`
+2. Reviews isolation, checks the selected endpoint, records owner/state/operation and budget
+3. Writes `.agents/digital-twin-universe/<name>/compose.yaml` with `x-dtu.repositories`
 4. Launches the DTU -- Amplifier installs inside thinking it's pulling from upstream
-5. Verifies: CLI starts, provider loads, smoke test passes
-6. Reports results
+5. Verifies mounts/home first, installed source identity, then the required deterministic checks
+6. Stops, exports evidence and removes the exact owned project, or names its accepting cleanup owner
 
 For multi-repo changes:
 ```
 "Validate my changes to ~/repos/amplifier-core and ~/repos/amplifier-module-provider-anthropic"
 ```
 
-Both repos get mirrored. A single profile is generated with `pypi_overrides` for core
-AND `url_rewrites` for the module. One DTU tests everything together.
+Both repos get snapshot entries. Install core's exact built wheel/direct source
+in the app environment; serving a Git repo does not redirect PyPI resolution.
+Verify both source joins in the same guest. Live provider smoke is separate scope.
 
 
 ## Re-testing After Fixes
 
-The generated DTU profiles include an `update` section. After fixing an issue:
+There is **no in-place update**. Export evidence and stop/remove the known owned
+project, then snapshot the changed working tree under a new explicit operation.
+Never replay an uncertain launch or execution; a timeout may leave a command
+running. Preserve its original ID, state and evidence until reconciled.
 
-1. Re-run `setup-digital-twin` against the same repos -- it re-mirrors your
-   current working tree (committed and uncommitted) to Gitea via a temporary
-   snapshot clone. Your local repo is never modified.
-2. `amplifier-digital-twin update <instance-id>`
-3. Re-run validator
+### Maintained checks
 
-No need to commit your fix locally and no need to destroy and relaunch.
+`python -m pytest tests/ -q` runs local contract guards, not a live lifecycle.
+The legacy profile is retained under `tests/fixtures/legacy-incus/` as a negative
+counterexample. Historical evaluation 01 is preserved but its runner refuses
+before provisioning; it is not silently relabeled as Smart Tool qualification.
+
+The opt-in `tests/run_smart_dtu_lifecycle.py --help` runs the maintained
+[Compose fixture](.agents/digital-twin-universe/amplifier-tester-self-validation/compose.yaml).
+It requires explicit approved tester/Foundation/skills/Smart Tool source paths,
+Docker endpoint, private state/evidence roots, image digest, owner and operation ID.
+Run it on the daemon's host (for example, in the approved Spark-2 task folder),
+not by pointing Spark-1's local snapshot paths at remote Docker.
+It installs Foundation from the served local repository, checks native imports,
+loads this behavior, resolves the Smart Tool skill, tests the legacy collision,
+and exports evidence before exact-project teardown. No paid calls are made.
+Generated Gitea/gateway containers count as sidecars of the owned project.
+Built images are reported separately because `destroy` does not remove them.
 
 
 ## Scope
