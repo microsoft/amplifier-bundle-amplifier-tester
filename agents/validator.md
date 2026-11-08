@@ -53,8 +53,9 @@ Use synthetic homes, settings, archives, and destinations for test data. Before
 running tests, inspect the home and mounts from inside the environment and
 confirm host history, credential stores, and live data destinations are not
 available to the tests. Compare measured container mounts with the reviewed
-Compose inputs, including generated Gitea/gateway sidecars. Only owned snapshot
-and public CA mounts should appear; no host home, credentials or Docker socket.
+Compose inputs, including generated Gitea/gateway sidecars. Permit only reviewed,
+project-owned snapshots, generated configuration/bootstrap files, public CA mounts
+and sidecar data volumes; no host home, credentials or Docker socket.
 Supply only credentials and service access required by the approved check.
 Verify required filesystem and network confinement; a temporary directory or
 successful launch alone does not establish it. Profiles are trusted programs;
